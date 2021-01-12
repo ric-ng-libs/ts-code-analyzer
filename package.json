@@ -1,7 +1,7 @@
 {
-  "name": "@ric-ng/ts-code-analyzer",
+  "name": "@ric-ng/ts-parser",
   "version": "0.0.1",
-  "description": "Analyseur de code. (mais Librairie créée au format: Angular Package)",
+  "description": "Parser. (mais Librairie créée au format: Angular Package)",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14"
@@ -11,7 +11,7 @@
   },
   "repository" : {
     "type": "git",
-    "url": "https://github.com/ric-ng-libs/ts-code-analyzer.git"
+    "url": "https://github.com/ric-ng-libs/ts-parser.git"
   },
   "publishConfig": { "access": "public" }
 }
