@@ -13,7 +13,10 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
         if ((string !== "") && (stringToParseAsString.length > 0)) {
 
             const regExp: RegExp = this.getRegExp();
+            console.log(`${stringToParseAsString}`);
+            console.log(regExp);
             const match: Array<string> = stringToParseAsString.match(regExp);
+            console.log(match);
 
             if (match !== null) {
                 const stringToParseMatching: IStringToParseMatching = this.createStringToParseMatchingObject(
@@ -30,10 +33,12 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
     }
 
     private getRegExp(): RegExp {
-        const regExpOption: string = (this.isCaseSensitivity()) ? "i" : "";
+        let regExpOption: string = (this.isCaseSensitivity()) ? "" : "i";
+        regExpOption += "g";
         const regExpString: string = this.getString();
+        console.log(regExpString);
         const result: RegExp = new RegExp(`^${regExpString}`, regExpOption);
         return (result);
-    }    
+    }
 
 }

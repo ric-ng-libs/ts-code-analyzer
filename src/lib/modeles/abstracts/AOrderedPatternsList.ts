@@ -22,8 +22,15 @@ export abstract class AOrderedPatternsList extends APatternsList {
                     if (result === null) {
                         result =this.createStringToParseMatchingsList();
                     }
-
+                    
                     result.addElementsFromList( stringToParseMatchings );
+
+                    stringToParse.incrementPointerPosition(stringToParseMatchings.getTotalLength());
+
+                } else {
+                    if (!stringToParse.isPointerAtTheEnd()) {
+                        stringToParse.incrementPointerPosition(1);
+                    }
                 }
 
                 return(stringToParseMatchings);

@@ -36,6 +36,11 @@ export class StringPattern extends ASimplePattern implements IStringPattern {
                                     .setCaseSensitivity(this.isCaseSensitivity())
                                     .testEquality(string, stringToParseStart);
 
+            console.log(`\n\nStringPattern:getStringToParseMatchings`);
+            console.log( `match: ${match}`,
+                         `stringToParseStart: ${stringToParseStart} (${stringToParseStart.length})`, 
+                         `string: ${string} (${string.length})`);
+
             if (match) {
                 const stringToParseMatching: IStringToParseMatching = this.createStringToParseMatchingObject(
                     this,
