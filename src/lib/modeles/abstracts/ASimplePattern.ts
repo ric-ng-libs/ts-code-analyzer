@@ -9,8 +9,6 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
 
     private static defaultCaseSensitivity: boolean = true;
 
-    protected stringToParseMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
-
     private string: string;
     private caseSensitivity: boolean;
 
@@ -103,6 +101,7 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
 
 
     private assignStringToParseMatchingsList(stringToParseMatching: IStringToParseMatching): void {
+        this.defineStringToParseMatchingsListIfNotDefined();        
         this.stringToParseMatchingsListOrNull = this.createStringToParseMatchingsList(
             Array(stringToParseMatching)
         );

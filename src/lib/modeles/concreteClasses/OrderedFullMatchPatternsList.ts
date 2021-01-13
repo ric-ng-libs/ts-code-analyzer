@@ -9,12 +9,12 @@ export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
         stringToParse.savePointerPosition();
     }    
 
-    protected onMatchingSuccess(
+    protected onPatternElementMatchingSuccess(
         stringToParseMatchings: StringToParseMatchingsListOrNull,
         stringToParse: IStringToParse
     ): void {
 
-        super.onMatchingSuccess(stringToParseMatchings, stringToParse);
+        super.onPatternElementMatchingSuccess(stringToParseMatchings, stringToParse);
         stringToParse.incrementPointerPosition(stringToParseMatchings.getTotalLength());
     }
 

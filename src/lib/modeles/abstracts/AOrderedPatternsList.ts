@@ -7,8 +7,6 @@ import { APatternsList } from "./APatternsList";
 
 export abstract class AOrderedPatternsList extends APatternsList {
     
-    private stringToParseMatchingsListOrNull: StringToParseMatchingsListOrNull; 
-
     protected abstract mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsListOrNull): boolean;
     
 
@@ -18,12 +16,12 @@ export abstract class AOrderedPatternsList extends APatternsList {
 
         this.list.each<StringToParseMatchingsListOrNull>(
             
-            (pattern: IPattern): StringToParseMatchingsListOrNull => {
+            (patternElement: IPattern): StringToParseMatchingsListOrNull => {
                 const stringToParseMatchings: StringToParseMatchingsListOrNull = 
-                    pattern.getStringToParseMatchings(stringToParse);
+                    patternElement.getStringToParseMatchings(stringToParse);
 
                 if (stringToParseMatchings !== null) {
-                    this.onMatchingSuccess(stringToParseMatchings, stringToParse);
+                    this.onPatternElementMatchingSuccess(stringToParseMatchings, stringToParse);
 
                 }
 
@@ -43,7 +41,7 @@ export abstract class AOrderedPatternsList extends APatternsList {
     }
 
 
-    protected onMatchingSuccess(
+    protected onPatternElementMatchingSuccess(
         stringToParseMatchings: StringToParseMatchingsListOrNull,
         stringToParse: IStringToParse
     ): void {
@@ -57,15 +55,13 @@ export abstract class AOrderedPatternsList extends APatternsList {
     }
     protected onAfterSearchMatchings(stringToParse: IStringToParse): void {
         
-    }    
-     
+    } 
+    
     
     private addStringToParseMatchingsToList(stringToParseMatchings: StringToParseMatchingsListOrNull): void {
-        if (this.stringToParseMatchingsListOrNull === null) {
-            this.stringToParseMatchingsListOrNull =this.createStringToParseMatchingsList();
-        }
-        
+        this.defineStringToParseMatchingsListIfNotDefined();
         this.stringToParseMatchingsListOrNull.addElementsFromList( stringToParseMatchings );      
+
     }
     
 

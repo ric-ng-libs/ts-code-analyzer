@@ -13,6 +13,9 @@ export abstract class APattern implements IPattern {
     private minOccurencesNumber: number = 1;
     private maxOccurencesNumber: number = APattern.PATTERN_MAX_OCCURENCES_NUMBER_NOT_DEFINED;
 
+    protected stringToParseMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
+
+
     constructor() {
     }
 
@@ -76,7 +79,14 @@ export abstract class APattern implements IPattern {
         const result: IStringToParseMatchingsList = new StringToParseMatchingsList(elements);
         return(result);
 
-    }    
+    }
+    
+    protected defineStringToParseMatchingsListIfNotDefined(): void {
+        if (this.stringToParseMatchingsListOrNull === null) {
+            this.stringToParseMatchingsListOrNull =this.createStringToParseMatchingsList();
+        }
+
+    }      
 
     protected createStringToParseMatchingObject(
         pattern: IPattern, 
@@ -91,6 +101,6 @@ export abstract class APattern implements IPattern {
             stringToParsePointerPosition
         );
         return(result);
-    }    
+    }  
 
 }
