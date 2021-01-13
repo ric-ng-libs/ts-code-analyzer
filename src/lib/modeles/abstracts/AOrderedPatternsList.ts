@@ -1,4 +1,4 @@
-import { IPattern, IStringToParse, IStringToParseMatchingsList } from "./../interfaces";
+import { IPattern, IStringToParse } from "./../interfaces";
 import { StringToParseMatchingsListOrNull } from "./../types";
 import { APatternsList } from "./APatternsList";
 
@@ -7,10 +7,14 @@ import { APatternsList } from "./APatternsList";
 
 export abstract class AOrderedPatternsList extends APatternsList {
     
+    private stringToParseMatchingsListOrNull: StringToParseMatchingsListOrNull; 
+
     protected abstract mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsListOrNull): boolean;
+    
 
     getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
-        let result: StringToParseMatchingsListOrNull = null;
+
+        this.onBeforeSearchMatchings(stringToParse);
 
         this.list.each<StringToParseMatchingsListOrNull>(
             
@@ -19,31 +23,50 @@ export abstract class AOrderedPatternsList extends APatternsList {
                     pattern.getStringToParseMatchings(stringToParse);
 
                 if (stringToParseMatchings !== null) {
-                    if (result === null) {
-                        result =this.createStringToParseMatchingsList();
-                    }
-                    
-                    result.addElementsFromList( stringToParseMatchings );
+                    this.onMatchingSuccess(stringToParseMatchings, stringToParse);
 
-                    stringToParse.incrementPointerPosition(stringToParseMatchings.getTotalLength());
-
-                } else {
-                    if (!stringToParse.isPointerAtTheEnd()) {
-                        stringToParse.incrementPointerPosition(1);
-                    }
                 }
 
                 return(stringToParseMatchings);
             },
 
             (stringToParseMatchings: StringToParseMatchingsListOrNull): boolean => {
-                let breakLoopCondition: boolean;
-                breakLoopCondition = this.mustStopSearchingMatching(stringToParseMatchings);
-                return(breakLoopCondition);
+                let breakLoop: boolean;
+                breakLoop = this.mustStopSearchingMatching(stringToParseMatchings);
+                return(breakLoop);
             }
         );
 
-        return(result);
+        this.onAfterSearchMatchings(stringToParse);
+
+        return(this.stringToParseMatchingsListOrNull);
     }
+
+
+    protected onMatchingSuccess(
+        stringToParseMatchings: StringToParseMatchingsListOrNull,
+        stringToParse: IStringToParse
+    ): void {
+        this.addStringToParseMatchingsToList(stringToParseMatchings);
+
+    }
+
+
+    protected onBeforeSearchMatchings(stringToParse: IStringToParse): void {
+        this.stringToParseMatchingsListOrNull = null;
+    }
+    protected onAfterSearchMatchings(stringToParse: IStringToParse): void {
+        
+    }    
+     
+    
+    private addStringToParseMatchingsToList(stringToParseMatchings: StringToParseMatchingsListOrNull): void {
+        if (this.stringToParseMatchingsListOrNull === null) {
+            this.stringToParseMatchingsListOrNull =this.createStringToParseMatchingsList();
+        }
+        
+        this.stringToParseMatchingsListOrNull.addElementsFromList( stringToParseMatchings );      
+    }
+    
 
 }

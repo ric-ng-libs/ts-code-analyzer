@@ -3,7 +3,7 @@ import { IPattern, IPatternsList } from "./../interfaces";
 import { APattern } from "./APattern";
 
 
-export abstract class APatternsList extends APattern implements IPattern, IPatternsList {
+export abstract class APatternsList extends APattern implements IPatternsList {
 
     protected list: GenericList<IPattern>;
 

@@ -1,13 +1,39 @@
-import { IStringComparator, StringComparator } from "@ric-ng/ts-general";
+import { IStringComparator, StringComparator, StringOrNull } from "@ric-ng/ts-general";
 
-import { IStringPattern, IStringToParse, IStringToParseMatching } from "./../interfaces";
-import { StringToParseMatchingsListOrNull } from "./../types";
+import { IStringPattern } from "./../interfaces";
 import { ASimplePattern } from "./../abstracts";
 
 
 export class StringPattern extends ASimplePattern implements IStringPattern {
 
     private matchComparator: IStringComparator = null;
+
+
+    protected getStringToParseMinimalLength(): number {
+        const string: string = this.getString();
+        const result: number = string.length;
+        return(result);
+    }
+
+    protected getStringToCompare(stringToParseAsString: string): string {
+        const string: string = this.getString();
+        const result: string = stringToParseAsString.substr(0, string.length);
+        return(result);
+    }    
+
+    protected getStringToParseMatching(stringToCompare: string): StringOrNull {
+        let result: StringOrNull;
+        
+        const string: string = this.getString();
+        const match: boolean = this.getMatchComparator()
+                                .setCaseSensitivity(this.isCaseSensitivity())
+                                .testEquality(string, stringToCompare);
+        console.log("match: ", match);
+        result = (match)? stringToCompare : null;
+        
+        return(result);
+    }    
+
 
     setMatchComparator(matchComparator: IStringComparator): IStringPattern {
         this.matchComparator = matchComparator;
@@ -22,36 +48,6 @@ export class StringPattern extends ASimplePattern implements IStringPattern {
     private createStringComparator(): IStringComparator {
         const result: IStringComparator = new StringComparator();
         return(result);
-    }
+    }    
 
-    getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
-        let result: StringToParseMatchingsListOrNull = null;
-
-        const string: string = this.getString();
-        const stringToParseAsString: string = stringToParse.getRemainingStringToParse();
-        if ((string !== "") && (stringToParseAsString.length >= string.length)) {
-
-            const stringToParseStart: string = stringToParse.getStringFromPointerPosition(string.length);
-            const match: boolean = this.getMatchComparator()
-                                    .setCaseSensitivity(this.isCaseSensitivity())
-                                    .testEquality(string, stringToParseStart);
-
-            console.log(`\n\nStringPattern:getStringToParseMatchings`);
-            console.log( `match: ${match}`,
-                         `stringToParseStart: ${stringToParseStart} (${stringToParseStart.length})`, 
-                         `string: ${string} (${string.length})`);
-
-            if (match) {
-                const stringToParseMatching: IStringToParseMatching = this.createStringToParseMatchingObject(
-                    this,
-                    stringToParseStart,
-                    stringToParse.getPointerPosition()
-                );
-                result = this.createStringToParseMatchingsList(Array(stringToParseMatching));
-            }
-
-        }
-
-        return (result);
-    }
 }

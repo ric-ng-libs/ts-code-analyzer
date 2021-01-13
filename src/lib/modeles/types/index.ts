@@ -1,1 +1,1 @@
-export * from './StringToParseMatchingArrayOrNullType';
+export * from './StringToParseMatchingsListOrNullType';
