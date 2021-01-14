@@ -20,6 +20,13 @@ export abstract class APattern implements IPattern {
     }
 
     abstract getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
+
+    xxx(): StringToParseMatchingsListOrNull {
+        const result: StringToParseMatchingsListOrNull = null;
+
+        
+        return(result);
+    }
        
 
     setMinOccurencesNumber(minOccurencesNumber: number): IPattern {
