@@ -4,7 +4,7 @@ import { StringToParseMatchingsListOrNull } from "./../types";
 
 export interface IPattern {
 
-    //@return { Array<IStringToParseMatching> | null } null if matching fails.
+    //@return { StringToParseMatchingsListOrNull } null if matching fails.
     getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
 
     setMinOccurencesNumber(minOccurencesNumber: number): IPattern;
