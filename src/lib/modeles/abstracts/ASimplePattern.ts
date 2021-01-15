@@ -1,4 +1,4 @@
-import { StringOrNull } from '@ric-ng/ts-general';
+import { StringOrNull, TypesTester } from '@ric-ng/ts-general';
 import { ISimplePattern, IStringToParse, IStringToParseMatching } from "./../interfaces";
 import { StringToParseMatchingsListOrNull } from "./../types";
 
@@ -24,7 +24,7 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
     protected abstract getStringToParseMatching(stringToCompare: string): StringOrNull;
         
     
-    constructor(string: string = "", caseSensitivity: boolean = ASimplePattern.defaultCaseSensitivity) {
+    constructor(string: string, caseSensitivity: boolean = ASimplePattern.defaultCaseSensitivity) {
         super();
 
         this.setString(string);
@@ -32,9 +32,9 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
     }
     
     setString(string: string): ISimplePattern {
-        if (string !== null) {
+        if (string !== null && TypesTester.isNotEmptyString(string)) {
             this.string = string;
-        }
+        } else throw new Error("Not empty string expected.");
         return(this);
     }
     getString(): string {
@@ -52,7 +52,7 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
     listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
 
         const string: string = this.getString();
-        console.log(`\n\n**** stringPattern: ${string} (Length: ${string.length});  caseSensitivity: ${this.isCaseSensitivity()}`);
+        console.log(`\n\n**** stringPattern: '${string}' (Length: ${string.length});  caseSensitivity: ${this.isCaseSensitivity()}`);
         const stringToParseAsString: string = stringToParse.getRemainingStringToParse();
         let stringToCompare: string;
         let stringToParseMatching: StringOrNull;
@@ -63,7 +63,7 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
             console.log(`stringToCompare: '${stringToCompare}'  (${stringToCompare.length})`);
             stringToParseMatching = this.getStringToParseMatching(stringToCompare);
             console.log(`>>> stringToParseMatching: '${stringToParseMatching}'`, "<<<\n\n");
-            if ((stringToParseMatching !== null) && (stringToParseMatching.length>0)) {
+            if ((stringToParseMatching !== null) /*&& (stringToParseMatching.length>0)*/) {
                 console.log(`>>> stringToParseMatching not null: '${stringToParseMatching}' (${stringToParseMatching.length})`, "<<<\n\n");
                 console.log(`onMatchingSuccess !! true`);
                 this.onMatchingSuccess(stringToParseMatching, stringToParse);
@@ -94,11 +94,6 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
 
 
     protected onMatchingFail(): void {
-        if (this.getConsecutiveMatchingsMinNumber() === 0) {
-            console.log(`>>>> Minimum à 0 donc on crée un resultat VIDE mais non null !!!`);
-            this.defineStringToParseNextMatchingsListIfNotDefined(); //Empty list, just to have a 
-                                                                     //this.stringToParseNextMatchingsListOrNull <> null.
-        }
     }
     
 

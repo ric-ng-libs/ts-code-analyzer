@@ -6,11 +6,14 @@ import { APatternsList } from "./APatternsList";
 
 
 export abstract class AOrderedPatternsList extends APatternsList {
-    
+    private static recursions: number = 0;
+
     protected abstract mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsListOrNull): boolean;
-    
+
 
     listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
+        AOrderedPatternsList.recursions++;
+        if (AOrderedPatternsList.recursions>20) throw new Error("OVER RECURSIONS !!!");
 
         this.onBeforeSearchMatchings(stringToParse);
 
@@ -26,6 +29,8 @@ export abstract class AOrderedPatternsList extends APatternsList {
                 if (stringToParseMatchings !== null) {
                     this.onPatternElementMatchingSuccess(stringToParseMatchings, stringToParse);
 
+                } else {
+                    this.onPatternElementMatchingFail();
                 }
 
                 return(stringToParseMatchings);
@@ -51,6 +56,10 @@ export abstract class AOrderedPatternsList extends APatternsList {
         stringToParse: IStringToParse
     ): void {
         this.addStringToParseMatchingsToList(stringToParseMatchings);
+
+    }
+
+    protected onPatternElementMatchingFail(): void {
 
     }
 

@@ -18,6 +18,11 @@ export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
         stringToParse.incrementPointerPosition(stringToParseMatchings.getTotalLength());
     }
 
+    protected onPatternElementMatchingFail(): void {
+        console.log(`OrderedFullMatchPatternsList - onPatternElementMatchingFail() : (RE)MISE ) NULL du result (this.stringToParseNextMatchingsListOrNull) `);
+        this.stringToParseNextMatchingsListOrNull = null;
+    }    
+
     protected mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsListOrNull): boolean {
         const result: boolean = (stringToParseMatchings === null);
         return(result);

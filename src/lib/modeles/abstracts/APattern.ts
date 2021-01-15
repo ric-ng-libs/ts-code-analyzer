@@ -16,17 +16,19 @@ export abstract class APattern implements IPattern {
     protected stringToParseNextMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
     private stringToParseNextConsecutiveMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
 
+
     constructor() {
     }
 
-    //@return { StringToParseMatchingsListOrNull } null if matching fails.
+    //@return { StringToParseMatchingsListOrNull }
     abstract listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
 
-    //@return { StringToParseMatchingsListOrNull } null if matching fails.
+    //@return { StringToParseMatchingsListOrNull } null if fails, id est the consecutive matchings number is out of range ([min, max]).
     listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
         let stringToParseNextConsecutiveMatchingsNumber: number = 0;
         let fail: boolean = false;
         let match: boolean;
+        let matchLength: number = 0;
         
         stringToParse.savePointerPosition();
         
@@ -34,14 +36,16 @@ export abstract class APattern implements IPattern {
         console.log(`\n\n************ root listStringToParseNextConsecutiveMatchings **************************************`);
         console.log(`this ; constructor.name=${this.constructor.name} :`);
         console.log(this);
-        do {
+        while( !stringToParse.isPointerAtTheEnd() ) {
             this.stringToParseNextMatchingsListOrNull = null;
             this.listStringToParseNextMatchings(stringToParse);
             match = ( this.stringToParseNextMatchingsListOrNull !== null );
-
+            matchLength = undefined;
             console.log(`root match= ${match}; this ; constructor.name=${this.constructor.name} :`);
             console.log(this);
             if (match) {
+                matchLength = this.stringToParseNextMatchingsListOrNull.getTotalLength();
+                console.log(`Match ok; matchLength = ${matchLength}`);
                 stringToParseNextConsecutiveMatchingsNumber++;
     
                 console.log(`ConsecutiveMatchingsNumber: ${stringToParseNextConsecutiveMatchingsNumber} / `+
@@ -59,34 +63,43 @@ export abstract class APattern implements IPattern {
                     console.log(`** !!!!!!!!! OK ajout à la liste de :`);
                     console.log(this.stringToParseNextMatchingsListOrNull.getElements());
                     this.addStringToParseNextMatchingsListToConsecutiveMatchingsList();
-                    // incrementValue = Math.min(this.stringToParseNextMatchingsListOrNull.getTotalLength(),
+                    // incrementValue = Math.min(matchLength,
                     //                           stringToParse.getRemainingStringToParse().length - 1);
                     console.log(`Pointer position = ${stringToParse.getPointerPosition()}/${stringToParse.getMaxPointerPosition()},`+
-                                `on veut incrém. de ${this.stringToParseNextMatchingsListOrNull.getTotalLength()}  ;  `+
+                                `on veut incrém. de ${matchLength}  ;  `+
                                 `avec Remaining stringToParseLength = ${stringToParse.getRemainingStringToParse().length}`
                                 );
-                    stringToParse.incrementPointerPosition(this.stringToParseNextMatchingsListOrNull.getTotalLength());
+                    stringToParse.incrementPointerPosition(matchLength);
                     
                     console.log(`\n\n`);
-                } else {
-                    if ( (stringToParseNextConsecutiveMatchingsNumber === 0) && (this.consecutiveMatchingsMinNumber === 0)) {
-                        console.log(`>>>> MINIMUM à 0 donc on crée un resultat VIDE mais non null !!!!!`); 
-                        this.defineStringToParseNextConsecutiveMatchingsListIfNotDefined(); //Empty list, just for a result <> null.
-                    }
+     
+    
                 }
 
             } 
-            if (match && !fail && !stringToParse.isPointerAtTheEnd()) {
-                console.log(`REBOUCLAGE : match= ${match}; fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}\n\n`);
-            }
 
-        } while(match && !fail && !stringToParse.isPointerAtTheEnd());
-console.log(`En sortie de while:  match= ${match}; fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}`);
+            if (fail || !match  ||  (match && matchLength === 0)  ||  stringToParse.isPointerAtTheEnd()) {
+                console.log(`SORTIE break DE BOUCLE : match= ${match}; matchLength=${matchLength} ;   fail=${fail};  (stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()})\n\n`);
+                break;
+
+            }   else {
+                console.log(`autorise REBOUCLAGE : match= ${match}; matchLength=${matchLength} ;   fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}\n\n`);
+
+            }         
+
+
+        }
+console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ;  fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}`);
 
         if (!fail) {
             fail = ( stringToParseNextConsecutiveMatchingsNumber < this.consecutiveMatchingsMinNumber );        
             if (fail) console.log(`FAIL: NOT ENOUGH match number !! ${stringToParseNextConsecutiveMatchingsNumber} < ${this.consecutiveMatchingsMinNumber}`);
             console.log(`::>  ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMinNumber} MIN.`);
+
+            if (!match && this.consecutiveMatchingsMinNumber === 0 && stringToParseNextConsecutiveMatchingsNumber === 0) {
+                    console.log(`>>>> MINIMUM à 0 donc on crée un resultat VIDE mais non null !!!!!`); 
+                    this.defineStringToParseNextConsecutiveMatchingsListIfNotDefined(); //Empty list, just for a result <> null.
+            }
         }
 
         if (fail) {
@@ -98,6 +111,7 @@ console.log(`En sortie de while:  match= ${match}; fail=${fail};  stringToParse.
 
         console.log(`FINAL root result: `);
         console.log(this.stringToParseNextConsecutiveMatchingsListOrNull);
+        console.log(`\n\n`);
         return(this.stringToParseNextConsecutiveMatchingsListOrNull);
     }
 
