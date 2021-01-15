@@ -5,4 +5,4 @@ export * from './ASimplePattern';
 export * from './APatternsList';
 export * from './AOrderedPatternsList';
 
-export * from './AStringParser';
+export * from './AParser';

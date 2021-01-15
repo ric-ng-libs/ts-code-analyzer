@@ -6,9 +6,11 @@ export * from './IStringPattern';
 export * from './IRegExpStringPattern';
 export * from './IPatternsList';
 
+export * from './IPatternsFactory';
+
 
 export * from './IStringToParse';
 export * from './IStringToParseMatching';
 export * from './IStringToParseMatchingsList';
 
-export * from './IStringParser';
+export * from './IParser';

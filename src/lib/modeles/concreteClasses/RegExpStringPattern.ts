@@ -23,7 +23,7 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
         console.log("RegExp: ", regExp);
         const match: Array<string> = stringToCompare.match(regExp);
         console.log("match: ", match);
-        result = (match !== null)? match[0] : null;
+        result = ((match !== null) && (match[0].length>0))? match[0] : null;
 
         return(result);
     }

@@ -7,79 +7,177 @@ import { StringToParseMatchingsList } from "./../concreteClasses/StringToParseMa
 
 export abstract class APattern implements IPattern {
 
-    private static readonly PATTERN_MAX_OCCURENCES_NUMBER: number = 50;
-    private static readonly PATTERN_MAX_OCCURENCES_NUMBER_NOT_DEFINED: number = null;
+    private static readonly PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER: number = 50;
+    private static readonly PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE: number = null;
 
-    private minOccurencesNumber: number = 1;
-    private maxOccurencesNumber: number = APattern.PATTERN_MAX_OCCURENCES_NUMBER_NOT_DEFINED;
+    private consecutiveMatchingsMinNumber: number = 1;
+    private consecutiveMatchingsMaxNumber: number = APattern.PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE;
 
-    protected stringToParseMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
-
+    protected stringToParseNextMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
+    private stringToParseNextConsecutiveMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
 
     constructor() {
     }
 
-    abstract getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
+    //@return { StringToParseMatchingsListOrNull } null if matching fails.
+    abstract listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
 
-    xxx(): StringToParseMatchingsListOrNull {
-        const result: StringToParseMatchingsListOrNull = null;
-
+    //@return { StringToParseMatchingsListOrNull } null if matching fails.
+    listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
+        let stringToParseNextConsecutiveMatchingsNumber: number = 0;
+        let fail: boolean = false;
+        let match: boolean;
         
-        return(result);
-    }
-       
+        stringToParse.savePointerPosition();
+        
+        this.stringToParseNextConsecutiveMatchingsListOrNull = null;
+        console.log(`\n\n************ root listStringToParseNextConsecutiveMatchings **************************************`);
+        console.log(`this ; constructor.name=${this.constructor.name} :`);
+        console.log(this);
+        do {
+            this.stringToParseNextMatchingsListOrNull = null;
+            this.listStringToParseNextMatchings(stringToParse);
+            match = ( this.stringToParseNextMatchingsListOrNull !== null );
 
-    setMinOccurencesNumber(minOccurencesNumber: number): IPattern {
-        this.minOccurencesNumber = minOccurencesNumber;
-        this.checkValidNbOccurences();
+            console.log(`root match= ${match}; this ; constructor.name=${this.constructor.name} :`);
+            console.log(this);
+            if (match) {
+                stringToParseNextConsecutiveMatchingsNumber++;
+    
+                console.log(`ConsecutiveMatchingsNumber: ${stringToParseNextConsecutiveMatchingsNumber} / `+
+                `${this.consecutiveMatchingsMaxNumber}`);
+
+                if (this.isDefinedConsecutiveMatchingsMaxNumber()) {
+                    fail = ( stringToParseNextConsecutiveMatchingsNumber > this.consecutiveMatchingsMaxNumber );
+                    console.log(`isDefinedConsecutiveMatchingsMaxNumber - fail=${fail}`);
+                    if (fail) console.log(`FAIL: over match number !! ${stringToParseNextConsecutiveMatchingsNumber} > ${this.consecutiveMatchingsMaxNumber}`);
+                    console.log(`::>  ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMaxNumber} MAX.`);
+
+                }
+
+                if (!fail) {
+                    console.log(`** !!!!!!!!! OK ajout à la liste de :`);
+                    console.log(this.stringToParseNextMatchingsListOrNull.getElements());
+                    this.addStringToParseNextMatchingsListToConsecutiveMatchingsList();
+                    // incrementValue = Math.min(this.stringToParseNextMatchingsListOrNull.getTotalLength(),
+                    //                           stringToParse.getRemainingStringToParse().length - 1);
+                    console.log(`Pointer position = ${stringToParse.getPointerPosition()}/${stringToParse.getMaxPointerPosition()},`+
+                                `on veut incrém. de ${this.stringToParseNextMatchingsListOrNull.getTotalLength()}  ;  `+
+                                `avec Remaining stringToParseLength = ${stringToParse.getRemainingStringToParse().length}`
+                                );
+                    stringToParse.incrementPointerPosition(this.stringToParseNextMatchingsListOrNull.getTotalLength());
+                    
+                    console.log(`\n\n`);
+                } else {
+                    if ( (stringToParseNextConsecutiveMatchingsNumber === 0) && (this.consecutiveMatchingsMinNumber === 0)) {
+                        console.log(`>>>> MINIMUM à 0 donc on crée un resultat VIDE mais non null !!!!!`); 
+                        this.defineStringToParseNextConsecutiveMatchingsListIfNotDefined(); //Empty list, just for a result <> null.
+                    }
+                }
+
+            } 
+            if (match && !fail && !stringToParse.isPointerAtTheEnd()) {
+                console.log(`REBOUCLAGE : match= ${match}; fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}\n\n`);
+            }
+
+        } while(match && !fail && !stringToParse.isPointerAtTheEnd());
+console.log(`En sortie de while:  match= ${match}; fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}`);
+
+        if (!fail) {
+            fail = ( stringToParseNextConsecutiveMatchingsNumber < this.consecutiveMatchingsMinNumber );        
+            if (fail) console.log(`FAIL: NOT ENOUGH match number !! ${stringToParseNextConsecutiveMatchingsNumber} < ${this.consecutiveMatchingsMinNumber}`);
+            console.log(`::>  ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMinNumber} MIN.`);
+        }
+
+        if (fail) {
+            console.log(`FAIL --> MISE A NULL du root result`);
+            this.stringToParseNextConsecutiveMatchingsListOrNull = null;
+        }
+
+        stringToParse.restoreLastSavedPointerPosition();
+
+        console.log(`FINAL root result: `);
+        console.log(this.stringToParseNextConsecutiveMatchingsListOrNull);
+        return(this.stringToParseNextConsecutiveMatchingsListOrNull);
+    }
+
+
+    private addStringToParseNextMatchingsListToConsecutiveMatchingsList(): void {
+        this.defineStringToParseNextConsecutiveMatchingsListIfNotDefined();
+        this.stringToParseNextConsecutiveMatchingsListOrNull.addElementsFromList(
+            this.stringToParseNextMatchingsListOrNull
+        );   
+
+    }
+
+    protected defineStringToParseNextConsecutiveMatchingsListIfNotDefined(): void {
+        if (this.stringToParseNextConsecutiveMatchingsListOrNull === null) {
+            this.stringToParseNextConsecutiveMatchingsListOrNull = this.createStringToParseMatchingsList();
+        }
+
+    }     
+
+    protected defineStringToParseNextMatchingsListIfNotDefined(): void {
+        if (this.stringToParseNextMatchingsListOrNull === null) {
+            this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList();
+        }
+
+    } 
+
+
+    setConsecutiveMatchingsMinNumber(consecutiveMatchingsMinNumber: number): IPattern {
+        this.consecutiveMatchingsMinNumber = consecutiveMatchingsMinNumber;
+        this.checkValidConsecutiveMatchingsMinMaxNumbers();
         return (this);
     }
-    getMinOccurencesNumber(): number {
-        return (this.minOccurencesNumber);
+    getConsecutiveMatchingsMinNumber(): number {
+        return (this.consecutiveMatchingsMinNumber);
     }
 
-    setMaxOccurencesNumber(maxOccurencesNumber: number): IPattern {
-        this.minOccurencesNumber = maxOccurencesNumber;
-        this.checkValidNbOccurences();
+    setConsecutiveMatchingsMaxNumber(consecutiveMatchingsMaxNumber: number): IPattern {
+        this.consecutiveMatchingsMaxNumber = consecutiveMatchingsMaxNumber;
+        this.checkValidConsecutiveMatchingsMinMaxNumbers();
         return (this);
     }
-    getMaxOccurencesNumber(): number {
-        return (this.maxOccurencesNumber);
+    getConsecutiveMatchingsMaxNumber(): number {
+        return (this.consecutiveMatchingsMaxNumber);
     }
-    setOccurencesNumbers(
-        minOccurencesNumber: number, 
-        maxOccurencesNumber: number = APattern.PATTERN_MAX_OCCURENCES_NUMBER_NOT_DEFINED
-    ): IPattern {
-        this.setMinOccurencesNumber(minOccurencesNumber);
-        this.setMaxOccurencesNumber(maxOccurencesNumber);
-        return (this);
-    }
-
-
-    isDefinedMaxOccurencesNumber(): boolean {
-        const result: boolean = (this.maxOccurencesNumber !== APattern.PATTERN_MAX_OCCURENCES_NUMBER_NOT_DEFINED);
+    isDefinedConsecutiveMatchingsMaxNumber(): boolean {
+        const result: boolean = (this.consecutiveMatchingsMaxNumber !== APattern.PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE);
         return (result);
+    }    
+
+    setConsecutiveMatchingsNumbers(
+        consecutiveMatchingsMinNumber: number, 
+        consecutiveMatchingsMaxNumber: number = APattern.PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE
+    ): IPattern {
+        this.setConsecutiveMatchingsMinNumber(consecutiveMatchingsMinNumber);
+        this.setConsecutiveMatchingsMaxNumber(consecutiveMatchingsMaxNumber);
+        return (this);
     }
 
-
-    private checkValidNbOccurences(): void {
-        const ok: boolean = this.testValidNbOccurences();
+    private checkValidConsecutiveMatchingsMinMaxNumbers(): void {
+        const ok: boolean = this.testValidConsecutiveMatchingsMinMaxNumbers();
         if (!ok) {
-            throw new Error(`Nombre d'occurences min=${this.minOccurencesNumber} ou max=${this.maxOccurencesNumber}, invalide.`);
+            throw new Error(`Nombre de matchings consécutifs min et/ou max invalide :  `+ 
+                            ` min=${this.consecutiveMatchingsMinNumber}  ou  max=${this.consecutiveMatchingsMaxNumber}.`
+                           );
         }
     }
-    private testValidNbOccurences(): boolean {
-        const result: boolean = (
-            (this.minOccurencesNumber >= 0)
-            &&
-            (this.maxOccurencesNumber <= APattern.PATTERN_MAX_OCCURENCES_NUMBER)
-            &&
-            (this.maxOccurencesNumber >= this.minOccurencesNumber)
-        );
+    private testValidConsecutiveMatchingsMinMaxNumbers(): boolean {
+        let result: boolean = (this.consecutiveMatchingsMinNumber >= 0);
+
+        if (result && this.isDefinedConsecutiveMatchingsMaxNumber()) {
+            result = (this.consecutiveMatchingsMaxNumber <= APattern.PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER)
+                        &&
+                     (this.consecutiveMatchingsMaxNumber >= this.consecutiveMatchingsMinNumber)
+                    ;
+        }
+
         return (result);
     }
 
-    
+
     protected createStringToParseMatchingsList(elements: Array<IStringToParseMatching> = [])
         : IStringToParseMatchingsList {
 
@@ -87,13 +185,6 @@ export abstract class APattern implements IPattern {
         return(result);
 
     }
-    
-    protected defineStringToParseMatchingsListIfNotDefined(): void {
-        if (this.stringToParseMatchingsListOrNull === null) {
-            this.stringToParseMatchingsListOrNull =this.createStringToParseMatchingsList();
-        }
-
-    }      
 
     protected createStringToParseMatchingObject(
         pattern: IPattern, 

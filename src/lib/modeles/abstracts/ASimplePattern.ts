@@ -49,31 +49,32 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
         return(this.caseSensitivity);
     }
 
-    getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
-
-        this.onBeforeSearchMatching(stringToParse);
+    listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
 
         const string: string = this.getString();
-        console.log(`\n\n*string: ${string} (Length: ${string.length});  caseSensitivity: ${this.isCaseSensitivity()}`);
+        console.log(`\n\n**** stringPattern: ${string} (Length: ${string.length});  caseSensitivity: ${this.isCaseSensitivity()}`);
         const stringToParseAsString: string = stringToParse.getRemainingStringToParse();
         let stringToCompare: string;
         let stringToParseMatching: StringOrNull;
         if ((string !== "") && (stringToParseAsString.length >= this.getStringToParseMinimalLength())) {
-
+            console.log(`stringToParseAsString: '${stringToParseAsString}'   (${stringToParseAsString.length})`);
+            
             stringToCompare = this.getStringToCompare(stringToParseAsString);
+            console.log(`stringToCompare: '${stringToCompare}'  (${stringToCompare.length})`);
             stringToParseMatching = this.getStringToParseMatching(stringToCompare);
-            console.log(`stringToParseAsString: ${stringToParseAsString}`);
-            console.log(`stringToCompare: ${stringToCompare}`);
-            console.log(`stringToParseMatching: ${stringToParseMatching}`);
-            if (stringToParseMatching !== null) {
+            console.log(`>>> stringToParseMatching: '${stringToParseMatching}'`, "<<<\n\n");
+            if ((stringToParseMatching !== null) && (stringToParseMatching.length>0)) {
+                console.log(`>>> stringToParseMatching not null: '${stringToParseMatching}' (${stringToParseMatching.length})`, "<<<\n\n");
+                console.log(`onMatchingSuccess !! true`);
                 this.onMatchingSuccess(stringToParseMatching, stringToParse);
-            }  
+            }  else {
+                console.log(`onMatchingFAIL !`);
+                this.onMatchingFail();
+            }
 
         }
 
-        this.onAfterSearchMatching(stringToParse);
-
-        return (this.stringToParseMatchingsListOrNull);
+        return (this.stringToParseNextMatchingsListOrNull);
     }
 
     
@@ -92,17 +93,18 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
     }
 
 
-    protected onBeforeSearchMatching(stringToParse: IStringToParse): void {
-        this.stringToParseMatchingsListOrNull = null;
+    protected onMatchingFail(): void {
+        if (this.getConsecutiveMatchingsMinNumber() === 0) {
+            console.log(`>>>> Minimum à 0 donc on crée un resultat VIDE mais non null !!!`);
+            this.defineStringToParseNextMatchingsListIfNotDefined(); //Empty list, just to have a 
+                                                                     //this.stringToParseNextMatchingsListOrNull <> null.
+        }
     }
-    protected onAfterSearchMatching(stringToParse: IStringToParse): void {
-        
-    } 
-
+    
 
     private assignStringToParseMatchingsList(stringToParseMatching: IStringToParseMatching): void {
-        this.defineStringToParseMatchingsListIfNotDefined();        
-        this.stringToParseMatchingsListOrNull = this.createStringToParseMatchingsList(
+        this.defineStringToParseNextMatchingsListIfNotDefined();        
+        this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList(
             Array(stringToParseMatching)
         );
     }    

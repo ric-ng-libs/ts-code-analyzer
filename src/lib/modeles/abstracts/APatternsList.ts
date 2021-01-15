@@ -7,11 +7,12 @@ export abstract class APatternsList extends APattern implements IPatternsList {
 
     protected list: GenericList<IPattern>;
 
-    constructor() {
+    constructor(patterns: Array<IPattern> = []) {
         super();
 
         this.list = new GenericList<IPattern>();
         this.list.setAllowNullElement(false);
+        this.definePatterns(patterns);
     }
     
     definePatterns(patterns: Array<IPattern>): IPatternsList {

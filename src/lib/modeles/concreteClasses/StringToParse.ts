@@ -21,6 +21,16 @@ export class StringToParse implements IStringToParse {
         return (this);
     }
 
+    getStringLength(): number {
+        const result: number = this.string.length;
+        return(result);
+    }
+
+    getMaxPointerPosition(): number {
+        const result: number = this.getStringLength() - 1;
+        return(result);
+    }
+
     getRemainingStringToParse(): string {
         const result: string = this.string.substr(this.pointerPosition);
         return(result);
@@ -49,7 +59,7 @@ export class StringToParse implements IStringToParse {
     }    
 
     private setMaxPointerPosition(): IStringToParse {
-        this.maxPointerPosition = this.string.length - 1;
+        this.maxPointerPosition = this.getMaxPointerPosition();
         return (this);
     }
 
@@ -73,16 +83,18 @@ export class StringToParse implements IStringToParse {
     }
 
     isPointerAtTheEnd(): boolean {
-        const result: boolean = (this.pointerPosition === this.maxPointerPosition);
+        const result: boolean = (this.pointerPosition === this.maxPointerPosition +1 );
         return (result);
     }
 
     private checkValidPointerPosition(): void {
-        if (this.pointerPosition > this.maxPointerPosition) {
-            throw new Error(this.getPointerPositionOverflowMessage());
-
-        } else if (this.pointerPosition < this.minPointerPosition) {
-            throw new Error(this.getPointerPositionOverflowMessage());
+        if (!this.isPointerAtTheEnd()) {
+            if (this.pointerPosition > this.maxPointerPosition) {
+                throw new Error(this.getPointerPositionOverflowMessage());
+    
+            } else if (this.pointerPosition < this.minPointerPosition) {
+                throw new Error(this.getPointerPositionOverflowMessage());
+            }
         }
     }
 

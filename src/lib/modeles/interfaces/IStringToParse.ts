@@ -3,7 +3,9 @@ export interface IStringToParse {
     setString(string: string): IStringToParse;
     getStringFromPointerPosition(lengthToRead: number): string;
     getRemainingStringToParse(): string;
+    getStringLength(): number;
     
+    getMaxPointerPosition(): number;
     isPointerAtTheEnd(): boolean;
     
     savePointerPosition(): IStringToParse;

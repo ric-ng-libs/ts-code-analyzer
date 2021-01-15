@@ -10,15 +10,18 @@ export abstract class AOrderedPatternsList extends APatternsList {
     protected abstract mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsListOrNull): boolean;
     
 
-    getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
+    listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
 
         this.onBeforeSearchMatchings(stringToParse);
 
         this.list.each<StringToParseMatchingsListOrNull>(
             
             (patternElement: IPattern): StringToParseMatchingsListOrNull => {
+                console.log(`\n----- Treating this Element Pattern (constructor name: ${this.constructor.name})`);
+                console.log(patternElement);
+
                 const stringToParseMatchings: StringToParseMatchingsListOrNull = 
-                    patternElement.getStringToParseMatchings(stringToParse);
+                    patternElement.listStringToParseNextConsecutiveMatchings(stringToParse);
 
                 if (stringToParseMatchings !== null) {
                     this.onPatternElementMatchingSuccess(stringToParseMatchings, stringToParse);
@@ -31,13 +34,15 @@ export abstract class AOrderedPatternsList extends APatternsList {
             (stringToParseMatchings: StringToParseMatchingsListOrNull): boolean => {
                 let breakLoop: boolean;
                 breakLoop = this.mustStopSearchingMatching(stringToParseMatchings);
+                console.log(`breakLoop: ${breakLoop}`);
+                console.log(`\n\n`);
                 return(breakLoop);
             }
         );
 
         this.onAfterSearchMatchings(stringToParse);
 
-        return(this.stringToParseMatchingsListOrNull);
+        return(this.stringToParseNextMatchingsListOrNull);
     }
 
 
@@ -51,18 +56,15 @@ export abstract class AOrderedPatternsList extends APatternsList {
 
 
     protected onBeforeSearchMatchings(stringToParse: IStringToParse): void {
-        this.stringToParseMatchingsListOrNull = null;
     }
     protected onAfterSearchMatchings(stringToParse: IStringToParse): void {
-        
     } 
     
     
     private addStringToParseMatchingsToList(stringToParseMatchings: StringToParseMatchingsListOrNull): void {
-        this.defineStringToParseMatchingsListIfNotDefined();
-        this.stringToParseMatchingsListOrNull.addElementsFromList( stringToParseMatchings );      
+        this.defineStringToParseNextMatchingsListIfNotDefined();
+        this.stringToParseNextMatchingsListOrNull.addElementsFromList( stringToParseMatchings );      
 
     }
-    
 
 }

@@ -5,13 +5,13 @@ import { StringToParseMatchingsListOrNull } from "./../types";
 export interface IPattern {
 
     //@return { StringToParseMatchingsListOrNull } null if matching fails.
-    getStringToParseMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
+    listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
 
-    setMinOccurencesNumber(minOccurencesNumber: number): IPattern;
-    getMinOccurencesNumber(): number;
-    setMaxOccurencesNumber(maxOccurencesNumber: number): IPattern;
-    getMaxOccurencesNumber(): number;
-    isDefinedMaxOccurencesNumber(): boolean;
-    setOccurencesNumbers(minOccurencesNumber: number, maxOccurencesNumber?: number): IPattern;    
+    setConsecutiveMatchingsMinNumber(consecutiveMatchingsMinNumber: number): IPattern;
+    getConsecutiveMatchingsMinNumber(): number;
+    setConsecutiveMatchingsMaxNumber(consecutiveMatchingsMaxNumber: number): IPattern;
+    getConsecutiveMatchingsMaxNumber(): number;
+    isDefinedConsecutiveMatchingsMaxNumber(): boolean;
+    setConsecutiveMatchingsNumbers(consecutiveMatchingsMinNumber: number, consecutiveMatchingsMaxNumber?: number): IPattern;    
 
 }
