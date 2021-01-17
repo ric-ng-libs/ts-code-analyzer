@@ -2,10 +2,12 @@ import { StringOrNull, TypesTester } from '@ric-ng/ts-general';
 import { ISimplePattern, IStringToParse, IStringToParseMatching } from "./../interfaces";
 import { StringToParseMatchingsListOrNull } from "./../types";
 
-import { APattern } from "./APattern";
+import { AChildablePattern } from "./AChildablePattern";
+
+import { StringToParseMatching } from "./../concreteClasses";
 
 
-export abstract class ASimplePattern extends APattern implements ISimplePattern {
+export abstract class ASimplePattern extends AChildablePattern implements ISimplePattern {
 
     private static defaultCaseSensitivity: boolean = true;
 
@@ -67,6 +69,7 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
                 console.log(`>>> stringToParseMatching not null: '${stringToParseMatching}' (${stringToParseMatching.length})`, "<<<\n\n");
                 console.log(`onMatchingSuccess !! true`);
                 this.onMatchingSuccess(stringToParseMatching, stringToParse);
+                
             }  else {
                 console.log(`onMatchingFAIL !`);
                 this.onMatchingFail();
@@ -83,7 +86,6 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
         stringToParse: IStringToParse
     ): void {
         const stringToParseMatching: IStringToParseMatching = this.createStringToParseMatchingObject(
-            this,
             stringToParseMatchingAsString,
             stringToParse.getPointerPosition()
         );
@@ -102,6 +104,19 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
         this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList(
             Array(stringToParseMatching)
         );
-    }    
+    }
+    
+    
+    private createStringToParseMatchingObject(
+        stringToParseMatching: string,
+        stringToParsePointerPosition: number, 
+    ): IStringToParseMatching {
+        const result: IStringToParseMatching = new StringToParseMatching(
+            this, 
+            stringToParseMatching,
+            stringToParsePointerPosition
+        );
+        return(result);
+    }     
    
 }

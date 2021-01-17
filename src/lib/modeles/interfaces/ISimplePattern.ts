@@ -1,6 +1,6 @@
-import { IPattern } from "./IPattern";
+import { IChildablePattern } from "./IChildablePattern";
 
-export interface ISimplePattern extends IPattern {
+export interface ISimplePattern extends IChildablePattern {
     setString(string: string): ISimplePattern;
     getString(): string;
 

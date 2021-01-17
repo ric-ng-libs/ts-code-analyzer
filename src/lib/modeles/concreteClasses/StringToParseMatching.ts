@@ -1,23 +1,20 @@
-import { IPattern, IStringToParseMatching } from "./../interfaces";
+import { IChildablePattern, IStringToParseMatching } from "./../interfaces";
 
 
 export class StringToParseMatching implements IStringToParseMatching {
 
     constructor(
-        private masterPattern: IPattern,
-        private pattern: IPattern, 
+        private pattern: IChildablePattern, 
         private stringToParseMatching: string,
         private stringToParsePointerPosition: number
     ) {
 
     }
 
-    getMasterPattern(): IPattern {
-        return(this.masterPattern);
-    }    
-    getPattern(): IPattern {
+    getPattern(): IChildablePattern {
         return(this.pattern);
     }
+    
     getStringToParseMatching(): string {
         return(this.stringToParseMatching);
     }

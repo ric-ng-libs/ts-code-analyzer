@@ -1,9 +1,11 @@
-import { IPattern } from "./IPattern";
+import { IChildablePattern } from "./IChildablePattern";
 
 export interface IStringToParseMatching {
-    getMasterPattern(): IPattern;
-    getPattern(): IPattern;
+    
+    getPattern(): IChildablePattern;
+
     getStringToParseMatching(): string;
     getStringToParseMatchingLength(): number;
     getStringToParsePointerPosition(): number;    
+    
 }

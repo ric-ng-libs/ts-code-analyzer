@@ -1,21 +1,21 @@
 import { GenericList } from "@ric-ng/ts-general";
-import { IPattern, IPatternsList } from "./../interfaces";
-import { APattern } from "./APattern";
+import { IChildablePattern, IPatternsList } from "./../interfaces";
+import { AChildablePattern } from "./AChildablePattern";
 
 
-export abstract class APatternsList extends APattern implements IPatternsList {
+export abstract class APatternsList extends AChildablePattern implements IPatternsList {
 
-    protected list: GenericList<IPattern>;
+    protected list: GenericList<IChildablePattern>;
 
-    constructor(patterns: Array<IPattern> = []) {
+    constructor(patterns: Array<IChildablePattern> = []) {
         super();
 
-        this.list = new GenericList<IPattern>();
+        this.list = new GenericList<IChildablePattern>();
         this.list.setAllowNullElement(false);
         this.definePatterns(patterns);
     }
     
-    definePatterns(patterns: Array<IPattern>): IPatternsList {
+    definePatterns(patterns: Array<IChildablePattern>): IPatternsList {
         if (patterns !== null) {
             this.list.clear();
             this.addPatterns(patterns);
@@ -23,25 +23,34 @@ export abstract class APatternsList extends APattern implements IPatternsList {
         return(this);
     }
 
-    definePattern(pattern: IPattern): IPatternsList {
+    definePattern(pattern: IChildablePattern): IPatternsList {
         if (pattern !== null) {
             this.definePatterns(Array(pattern));
         }
         return(this);         
     }
 
-    addPatterns(patterns: Array<IPattern>): IPatternsList {
+    addPatterns(patterns: Array<IChildablePattern>): IPatternsList {
         if (patterns !== null) {
             this.list.addElements(patterns);
+            this.setParentPatternTo(patterns);
         }
         return(this);        
     }
 
-    addPattern(pattern: IPattern): IPatternsList {
+    addPattern(pattern: IChildablePattern): IPatternsList {
         if (pattern !== null) {
             this.list.addElement(pattern);
+            this.setParentPatternTo(Array(pattern));
         }
         return(this); 
-    }    
+    }
+
+    setParentPatternTo(patterns: Array<IChildablePattern>): IPatternsList {
+        for(const pattern of patterns) {
+            pattern.setParentPattern(this);
+        }
+        return(this);
+    }
 
 }

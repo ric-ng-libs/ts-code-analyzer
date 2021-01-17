@@ -1,4 +1,4 @@
-import { IPattern, IStringToParse } from "./../interfaces";
+import { IChildablePattern, IStringToParse } from "./../interfaces";
 import { StringToParseMatchingsListOrNull } from "./../types";
 import { APatternsList } from "./APatternsList";
 
@@ -12,14 +12,13 @@ export abstract class AOrderedPatternsList extends APatternsList {
 
 
     listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
-        AOrderedPatternsList.recursions++;
-        if (AOrderedPatternsList.recursions>20) throw new Error("OVER RECURSIONS !!!");
+         AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>100) throw new Error("OVER RECURSIONS !!!");
 
         this.onBeforeSearchMatchings(stringToParse);
 
         this.list.each<StringToParseMatchingsListOrNull>(
             
-            (patternElement: IPattern): StringToParseMatchingsListOrNull => {
+            (patternElement: IChildablePattern): StringToParseMatchingsListOrNull => {
                 console.log(`\n----- Treating this Element Pattern (constructor name: ${this.constructor.name})`);
                 console.log(patternElement);
 

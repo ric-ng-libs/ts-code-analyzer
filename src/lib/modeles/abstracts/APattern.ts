@@ -1,7 +1,6 @@
 import { IPattern, IStringToParse, IStringToParseMatching, IStringToParseMatchingsList } from "./../interfaces";
 import { StringToParseMatchingsListOrNull } from "./../types";
 
-import { StringToParseMatching } from "./../concreteClasses/StringToParseMatching";
 import { StringToParseMatchingsList } from "./../concreteClasses/StringToParseMatchingsList";
 
 
@@ -199,20 +198,5 @@ console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ; 
         return(result);
 
     }
-
-    protected createStringToParseMatchingObject(
-        pattern: IPattern, 
-        stringToParseMatching: string,
-        stringToParsePointerPosition: number, 
-    ): IStringToParseMatching {
-        const masterPattern: IPattern = (pattern === this)? null : this;
-        const result: IStringToParseMatching = new StringToParseMatching(
-            masterPattern,
-            pattern, 
-            stringToParseMatching,
-            stringToParsePointerPosition
-        );
-        return(result);
-    }  
 
 }

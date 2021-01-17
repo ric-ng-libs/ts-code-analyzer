@@ -1,6 +1,9 @@
+export * from './OOP';
+
 export * from './ILanguageStringPatternsProvider';
 
 export * from './IPattern';
+export * from './IChildablePattern';
 export * from './ISimplePattern';
 export * from './IStringPattern';
 export * from './IRegExpStringPattern';

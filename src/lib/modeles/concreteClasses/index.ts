@@ -1,3 +1,5 @@
+export * from './OOP';
+
 export * from './TypescriptStringPatternsProvider';
 
 export * from './StringPattern';

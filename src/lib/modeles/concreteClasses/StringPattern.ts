@@ -26,11 +26,12 @@ export class StringPattern extends ASimplePattern implements IStringPattern {
         
         const string: string = this.getString();
         const match: boolean = this.getMatchComparator()
-                                .setCaseSensitivity(this.isCaseSensitivity())
-                                .testEquality(string, stringToCompare);
-        console.log("match: ", match);
+                               .setCaseSensitivity(this.isCaseSensitivity())
+                               .testEquality(string, stringToCompare);
+
         result = (match)? stringToCompare : null;
-        
+        console.log( `StringPattern match: ${match}; result=${result}` );
+
         return(result);
     }    
 

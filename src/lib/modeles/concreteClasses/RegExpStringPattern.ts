@@ -21,9 +21,10 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
         
         const regExp: RegExp = this.getRegExp();
         console.log("RegExp: ", regExp);
-        const match: Array<string> = stringToCompare.match(regExp);
-        console.log("match: ", match);
-        result = ((match !== null) /*&& (match[0].length>0)*/)? match[0] : null;
+        const matchResult: Array<string> = stringToCompare.match(regExp);
+        console.log("RegExpPattern matchResult: ", matchResult);
+
+        result = ( (matchResult !== null) /*&& (match[0].length>0)*/ )? matchResult[0] : null;
 
         return(result);
     }
