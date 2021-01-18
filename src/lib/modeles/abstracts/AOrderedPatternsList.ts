@@ -12,14 +12,14 @@ export abstract class AOrderedPatternsList extends APatternsList {
 
 
     listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
-         AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>100) throw new Error("OVER RECURSIONS !!!");
+         AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900) throw new Error("OVER RECURSIONS !!!");
 
         this.onBeforeSearchMatchings(stringToParse);
 
         this.list.each<StringToParseMatchingsListOrNull>(
             
-            (patternElement: IChildablePattern): StringToParseMatchingsListOrNull => {
-                console.log(`\n----- Treating this Element Pattern (constructor name: ${this.constructor.name})`);
+            (patternElement: IChildablePattern, index: number): StringToParseMatchingsListOrNull => {
+                console.log(`\n----- Sur List ${this.constructor.name}): Treating this ElementPattern[${index}] ; (Element constructor name: ${patternElement.constructor.name})`);
                 console.log(patternElement);
 
                 const stringToParseMatchings: StringToParseMatchingsListOrNull = 
@@ -38,7 +38,7 @@ export abstract class AOrderedPatternsList extends APatternsList {
             (stringToParseMatchings: StringToParseMatchingsListOrNull): boolean => {
                 let breakLoop: boolean;
                 breakLoop = this.mustStopSearchingMatching(stringToParseMatchings);
-                console.log(`breakLoop: ${breakLoop}`);
+                console.log(`breakLoop: ${breakLoop}  (List constructor name: ${this.constructor.name})`);
                 console.log(`\n\n`);
                 return(breakLoop);
             }

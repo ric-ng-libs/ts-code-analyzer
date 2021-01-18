@@ -1,6 +1,5 @@
 export * from './OOP';
 
-export * from './TypescriptStringPatternsProvider';
 
 export * from './StringPattern';
 export * from './RegExpStringPattern';
@@ -12,3 +11,6 @@ export * from './PatternsFactory';
 export * from './StringToParse';
 export * from './StringToParseMatching';
 export * from './StringToParseMatchingsList';
+
+export * from './LanguageTypescriptTokensProvider';
+export * from './LanguageTypescriptPatternsFactory';

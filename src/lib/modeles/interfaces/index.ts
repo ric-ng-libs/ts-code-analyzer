@@ -1,7 +1,5 @@
 export * from './OOP';
 
-export * from './ILanguageStringPatternsProvider';
-
 export * from './IPattern';
 export * from './IChildablePattern';
 export * from './ISimplePattern';
@@ -17,3 +15,6 @@ export * from './IStringToParseMatching';
 export * from './IStringToParseMatchingsList';
 
 export * from './IParser';
+
+export * from './ILanguageTokensProvider';
+export * from './ILanguagePatternsFactory';

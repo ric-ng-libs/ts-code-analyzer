@@ -22,6 +22,19 @@ export abstract class APattern implements IPattern {
     //@return { StringToParseMatchingsListOrNull }
     abstract listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
 
+    public debugString(indent: number = 0): string {
+        let indentString: string;
+        indentString=" ".repeat(indent+4);
+    
+        return(
+                `${indentString}${this.constructor.name} / [${this.consecutiveMatchingsMinNumber}, ${this.consecutiveMatchingsMaxNumber}]`
+            );
+    }    
+    protected debug(): void {
+        console.log(this.debugString());
+    }
+    
+
     //@return { StringToParseMatchingsListOrNull } null if fails, id est the consecutive matchings number is out of range ([min, max]).
     listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
         let stringToParseNextConsecutiveMatchingsNumber: number = 0;
@@ -32,22 +45,22 @@ export abstract class APattern implements IPattern {
         stringToParse.savePointerPosition();
         
         this.stringToParseNextConsecutiveMatchingsListOrNull = null;
-        console.log(`\n\n************ root listStringToParseNextConsecutiveMatchings **************************************`);
-        console.log(`this ; constructor.name=${this.constructor.name} :`);
-        console.log(this);
+        console.log(`\n\n************ START root ; ${this.constructor.name} : listStringToParseNextConsecutiveMatchings **************************************`);
+        this.debug();
         while( !stringToParse.isPointerAtTheEnd() ) {
             this.stringToParseNextMatchingsListOrNull = null;
+            console.log(`IN loop beginning, calling this.listStringToParseNextMatchings('${stringToParse.getStringFromPointerPosition(50)}.....')`);
             this.listStringToParseNextMatchings(stringToParse);
             match = ( this.stringToParseNextMatchingsListOrNull !== null );
             matchLength = undefined;
-            console.log(`root match= ${match}; this ; constructor.name=${this.constructor.name} :`);
-            console.log(this);
+            console.log(`  *>root match= ${match}; this ; (constructor.name=${this.constructor.name}) :`);
+            this.debug();
             if (match) {
                 matchLength = this.stringToParseNextMatchingsListOrNull.getTotalLength();
-                console.log(`Match ok; matchLength = ${matchLength}`);
+                console.log(`  *>root match OK; matchLength = ${matchLength}`);
                 stringToParseNextConsecutiveMatchingsNumber++;
     
-                console.log(`ConsecutiveMatchingsNumber: ${stringToParseNextConsecutiveMatchingsNumber} / `+
+                console.log(`  >>>ConsecutiveMatchingsNumber: ${stringToParseNextConsecutiveMatchingsNumber} / `+
                 `${this.consecutiveMatchingsMaxNumber}`);
 
                 if (this.isDefinedConsecutiveMatchingsMaxNumber()) {
@@ -75,20 +88,20 @@ export abstract class APattern implements IPattern {
     
                 }
 
-            } 
+            } else console.log(`  *>root match NOT ok\n\n`);
 
             if (fail || !match  ||  (match && matchLength === 0)  ||  stringToParse.isPointerAtTheEnd()) {
                 console.log(`SORTIE break DE BOUCLE : match= ${match}; matchLength=${matchLength} ;   fail=${fail};  (stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()})\n\n`);
                 break;
 
             }   else {
-                console.log(`autorise REBOUCLAGE : match= ${match}; matchLength=${matchLength} ;   fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}\n\n`);
+                console.log(`autorise REBOUCLAGE : match= ${match}; matchLength=${matchLength} ;  ConsecutiveMatchingsNumber=${stringToParseNextConsecutiveMatchingsNumber} ; fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}\n\n`);
 
             }         
 
 
         }
-console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ;  fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}`);
+console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ;  ConsecutiveMatchingsNumber=${stringToParseNextConsecutiveMatchingsNumber} ;  fail=${fail};  stringToParse.isPointerAtTheEnd()=${stringToParse.isPointerAtTheEnd()}`);
 
         if (!fail) {
             fail = ( stringToParseNextConsecutiveMatchingsNumber < this.consecutiveMatchingsMinNumber );        
@@ -102,14 +115,15 @@ console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ; 
         }
 
         if (fail) {
-            console.log(`FAIL --> MISE A NULL du root result`);
+            console.log(`FAIL(min ou max)[  ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMinNumber}   ;   ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMaxNumber}]   donc --> MISE A NULL du root result`);
             this.stringToParseNextConsecutiveMatchingsListOrNull = null;
         }
 
         stringToParse.restoreLastSavedPointerPosition();
 
-        console.log(`FINAL root result: `);
-        console.log(this.stringToParseNextConsecutiveMatchingsListOrNull);
+        console.log(`FINAL root result, for : `);
+        this.debug();
+        console.log((this.stringToParseNextConsecutiveMatchingsListOrNull)? this.stringToParseNextConsecutiveMatchingsListOrNull.getElements() : this.stringToParseNextConsecutiveMatchingsListOrNull);
         console.log(`\n\n`);
         return(this.stringToParseNextConsecutiveMatchingsListOrNull);
     }

@@ -7,6 +7,29 @@ export abstract class APatternsList extends AChildablePattern implements IPatter
 
     protected list: GenericList<IChildablePattern>;
 
+
+    public debugString(indent: number = 0): string {
+        let index: number = 0;
+        let indentString: string;
+        indentString=" ".repeat(indent);
+
+        const infos: Array<string> = [];
+        infos.push(`${super.debugString()} ; elems: [ (${this.list.getElementsNumber()}) \n`);
+        for(const element of this.list.getElements()) {
+            infos.push( `    ${indentString}[${index++}]=> ${element.debugString(indent+4)}`  );
+        }
+        infos.push(`${indentString}]\n\n`);
+
+        return( infos.join("\n") );
+
+    }
+
+    protected debug(): void {
+        super.debug();
+        // console.log(this.list.getElements());
+        console.log(`\n`);
+    }     
+
     constructor(patterns: Array<IChildablePattern> = []) {
         super();
 

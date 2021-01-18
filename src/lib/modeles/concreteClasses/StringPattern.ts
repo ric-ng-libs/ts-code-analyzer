@@ -30,7 +30,7 @@ export class StringPattern extends ASimplePattern implements IStringPattern {
                                .testEquality(string, stringToCompare);
 
         result = (match)? stringToCompare : null;
-        console.log( `StringPattern match: ${match}; result=${result}` );
+        console.log( `          StringPattern match: ${match}; result=${result}` );
 
         return(result);
     }    
