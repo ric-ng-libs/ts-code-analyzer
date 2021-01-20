@@ -1,5 +1,8 @@
-import { IPatternsList, IChildablePattern } from './../interfaces';
+import { IPatternsList, IChildablePattern, IStringToParseMatching, IStringToParseMatchingsList } from './../interfaces';
 import { APattern } from './APattern';
+
+import { StringToParseMatchingsList } from './../concreteClasses/StringToParseMatchingsList';
+
 
 export abstract class AChildablePattern extends APattern implements IChildablePattern {
     
@@ -13,4 +16,12 @@ export abstract class AChildablePattern extends APattern implements IChildablePa
     getParentPattern(): (IPatternsList | null) {
         return(this.parentPattern);
     }
+
+    protected createStringToParseMatchingsList(stringToParseMatchingq: Array<IStringToParseMatching> = [])
+        : IStringToParseMatchingsList {
+
+        const result: IStringToParseMatchingsList = new StringToParseMatchingsList(this, stringToParseMatchingq);
+        return(result);
+
+    }    
 }

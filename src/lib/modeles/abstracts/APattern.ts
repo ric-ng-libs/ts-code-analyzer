@@ -13,7 +13,7 @@ export abstract class APattern implements IPattern {
     private consecutiveMatchingsMaxNumber: number = APattern.PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE;
 
     protected stringToParseNextMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
-    private stringToParseNextConsecutiveMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
+    private stringToParseNextConsecutiveMatchingsListsOrNull: StringToParseMatchingsListOrNull = null;
 
 
     constructor() {
@@ -44,7 +44,7 @@ export abstract class APattern implements IPattern {
         
         stringToParse.savePointerPosition();
         
-        this.stringToParseNextConsecutiveMatchingsListOrNull = null;
+        this.stringToParseNextConsecutiveMatchingsListsOrNull = null;
         console.log(`\n\n************ START root ; ${this.constructor.name} : listStringToParseNextConsecutiveMatchings **************************************`);
         this.debug();
         while( !stringToParse.isPointerAtTheEnd() ) {
@@ -116,30 +116,33 @@ console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ; 
 
         if (fail) {
             console.log(`FAIL(min ou max)[  ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMinNumber}   ;   ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMaxNumber}]   donc --> MISE A NULL du root result`);
-            this.stringToParseNextConsecutiveMatchingsListOrNull = null;
+            this.stringToParseNextConsecutiveMatchingsListsOrNull = null;
         }
 
         stringToParse.restoreLastSavedPointerPosition();
 
         console.log(`FINAL root result, for : `);
         this.debug();
-        console.log((this.stringToParseNextConsecutiveMatchingsListOrNull)? this.stringToParseNextConsecutiveMatchingsListOrNull.getElements() : this.stringToParseNextConsecutiveMatchingsListOrNull);
+        console.log((this.stringToParseNextConsecutiveMatchingsListsOrNull)? this.stringToParseNextConsecutiveMatchingsListsOrNull.getElements() : this.stringToParseNextConsecutiveMatchingsListsOrNull);
         console.log(`\n\n`);
-        return(this.stringToParseNextConsecutiveMatchingsListOrNull);
+        return(this.stringToParseNextConsecutiveMatchingsListsOrNull);
     }
 
 
     private addStringToParseNextMatchingsListToConsecutiveMatchingsList(): void {
         this.defineStringToParseNextConsecutiveMatchingsListIfNotDefined();
-        this.stringToParseNextConsecutiveMatchingsListOrNull.addElementsFromList(
+        // this.stringToParseNextConsecutiveMatchingsListOrNull.addElementsFromList(
+        //     this.stringToParseNextMatchingsListOrNull
+        // );
+        this.stringToParseNextConsecutiveMatchingsListsOrNull.addElement(
             this.stringToParseNextMatchingsListOrNull
-        );   
+        );
 
     }
 
     protected defineStringToParseNextConsecutiveMatchingsListIfNotDefined(): void {
-        if (this.stringToParseNextConsecutiveMatchingsListOrNull === null) {
-            this.stringToParseNextConsecutiveMatchingsListOrNull = this.createStringToParseMatchingsList();
+        if (this.stringToParseNextConsecutiveMatchingsListsOrNull === null) {
+            this.stringToParseNextConsecutiveMatchingsListsOrNull = this.createStringToParseMatchingsList();
         }
 
     }     
@@ -204,13 +207,5 @@ console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ; 
         return (result);
     }
 
-
-    protected createStringToParseMatchingsList(elements: Array<IStringToParseMatching> = [])
-        : IStringToParseMatchingsList {
-
-        const result: IStringToParseMatchingsList = new StringToParseMatchingsList(elements);
-        return(result);
-
-    }
 
 }

@@ -7,6 +7,8 @@ export * from './ASimplePattern';
 export * from './APatternsList';
 export * from './AOrderedPatternsList';
 
+export * from './AStringToParseMatching';
+
 export * from './AParser';
 
 export * from './ALanguageTokensProvider';

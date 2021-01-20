@@ -1,28 +1,41 @@
+import { NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
+
 import { IChildablePattern, IStringToParseMatching } from "./../interfaces";
+import { AStringToParseMatching } from './../abstracts';
 
 
-export class StringToParseMatching implements IStringToParseMatching {
+export class StringToParseMatching extends AStringToParseMatching implements IStringToParseMatching {
+
+    private pointerPosition: NumberOrNull = null;
+
 
     constructor(
-        private pattern: IChildablePattern, 
-        private stringToParseMatching: string,
-        private stringToParsePointerPosition: number
+        pattern: IChildablePattern, 
+        stringToParseMatching: string,
+        pointerPosition: number
     ) {
+        super(pattern);
 
+        this.setAsString(stringToParseMatching);
+        this.setPointerPosition(pointerPosition);
     }
+   
 
-    getPattern(): IChildablePattern {
-        return(this.pattern);
+    getAsString(): string {
+        return(this.asString);
+    }
+    private setAsString(asString: string): void {
+        if (asString !== null) {
+            this.asString = asString;
+        }
     }
     
-    getStringToParseMatching(): string {
-        return(this.stringToParseMatching);
-    }
-    getStringToParseMatchingLength(): number {
-        return(this.getStringToParseMatching().length);
+    getPointerPosition(): NumberOrNull {
+        return(this.pointerPosition);
     }    
-    getStringToParsePointerPosition(): number {
-        return(this.stringToParsePointerPosition);
+    private setPointerPosition(pointerPosition: number): void {
+        this.pointerPosition = pointerPosition;
     }
+
 
 }

@@ -33,9 +33,14 @@ export abstract class APatternsList extends AChildablePattern implements IPatter
     constructor(patterns: Array<IChildablePattern> = []) {
         super();
 
+        this.createList();
+        this.definePatterns(patterns);
+    }
+    
+    private createList(): void {
         this.list = new GenericList<IChildablePattern>();
         this.list.setAllowNullElement(false);
-        this.definePatterns(patterns);
+        
     }
     
     definePatterns(patterns: Array<IChildablePattern>): IPatternsList {

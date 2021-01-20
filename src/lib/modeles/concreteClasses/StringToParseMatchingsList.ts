@@ -1,30 +1,71 @@
-import { GenericList } from '@ric-ng/ts-general';
-import { IStringToParseMatching, IStringToParseMatchingsList } from './../interfaces';
+import { GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
+
+import { IStringToParseMatching, IStringToParseMatchingsList, IChildablePattern } from './../interfaces';
+
+import { AStringToParseMatching } from './../abstracts';
 
 
 export class StringToParseMatchingsList 
-    extends GenericList<IStringToParseMatching> 
+    extends  AStringToParseMatching
     implements IStringToParseMatchingsList {
 
-    constructor(elements: Array<IStringToParseMatching> = []) {
-        super(elements);
+    private list: GenericList<IStringToParseMatching>;
 
-        this.setAllowNullElement(false);
+    constructor(
+        pattern: IChildablePattern, 
+        stringToParseMatchings: Array<IStringToParseMatching> = []
+    ) {
+        super(pattern);
+
+        this.createList(stringToParseMatchings);
+    }        
+
+    private createList(stringToParseMatchings: Array<IStringToParseMatching> = []) {
+        if (stringToParseMatchings !== null) {
+            this.list = new GenericList<IStringToParseMatching>(stringToParseMatchings);
+            this.list.setAllowNullElement(false);
+        }
     }
 
-    getTotalLength(): number {
-        let result: number = 0;
+    getAsString(useCache: boolean = true): StringOrNull {
+        if (this.asString === null || !useCache) {
+            this.asString = this.computeGetAsString(useCache);
+        }
+        return(this.asString);
+    }
 
-        this.each<void>(
+    addStringToParseMatching(stringToParseMatching: IStringToParseMatching): IStringToParseMatchingsList {
+        this.list.addElement(stringToParseMatching);
+        return(this);
+    }
 
-            (element: IStringToParseMatching): void => {
-                const stringToParseMatchingLength: number = element.getStringToParseMatchingLength();
-                result += stringToParseMatchingLength;
+    private computeGetAsString(useCache: boolean): StringOrNull {
+        let result: StringOrNull = null;
+
+        this.list.each<void>(
+
+            (stringToParseMatching: IStringToParseMatching): void => {
+                const stringToParseMatchingAsString: StringOrNull = stringToParseMatching.getAsString(useCache);
+                if (stringToParseMatchingAsString !== null) {
+
+                    if (result === null) {
+                        result = "";
+                    }
+                    result += stringToParseMatchingAsString;
+
+                }
             }
 
         );
 
-        return(result);
+        return(result);        
     }
+
+
+    getPointerPosition(): NumberOrNull {
+        const result: NumberOrNull = (this.list.getElementsNumber()>0)? this.list.getElementByIndex(0).getPointerPosition() : null;
+        return(result);
+    }      
+    
     
 }
