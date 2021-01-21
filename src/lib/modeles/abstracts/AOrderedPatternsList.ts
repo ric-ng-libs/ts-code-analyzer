@@ -1,5 +1,5 @@
 import { IChildablePattern, IStringToParse } from "./../interfaces";
-import { StringToParseMatchingsListOrNull } from "./../types";
+import { StringToParseMatchingsListOrNull, StringToParseMatchingsOrNull } from "./../types";
 import { APatternsList } from "./APatternsList";
 
 
@@ -8,21 +8,22 @@ import { APatternsList } from "./APatternsList";
 export abstract class AOrderedPatternsList extends APatternsList {
     private static recursions: number = 0;
 
-    protected abstract mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsListOrNull): boolean;
+    protected abstract mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsOrNull): boolean;
 
 
-    listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
+    listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsOrNull {
          AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900) throw new Error("OVER RECURSIONS !!!");
 
         this.onBeforeSearchMatchings(stringToParse);
 
-        this.list.each<StringToParseMatchingsListOrNull>(
+        this.list.each<StringToParseMatchingsOrNull>(
             
-            (patternElement: IChildablePattern, index: number): StringToParseMatchingsListOrNull => {
-                console.log(`\n----- Sur List ${this.constructor.name}): Treating this ElementPattern[${index}] ; (Element constructor name: ${patternElement.constructor.name})`);
+            (patternElement: IChildablePattern, index: number): StringToParseMatchingsOrNull => {
+                console.log(`\n----- Sur List ${this.constructor.name}): Treating this ElementPattern[${index}] ;`
+                            +` (Element constructor name: ${patternElement.constructor.name})`);
                 console.log(patternElement);
 
-                const stringToParseMatchings: StringToParseMatchingsListOrNull = 
+                const stringToParseMatchings: StringToParseMatchingsOrNull = 
                     patternElement.listStringToParseNextConsecutiveMatchings(stringToParse);
 
                 if (stringToParseMatchings !== null) {
@@ -35,7 +36,7 @@ export abstract class AOrderedPatternsList extends APatternsList {
                 return(stringToParseMatchings);
             },
 
-            (stringToParseMatchings: StringToParseMatchingsListOrNull): boolean => {
+            (stringToParseMatchings: StringToParseMatchingsOrNull): boolean => {
                 let breakLoop: boolean;
                 breakLoop = this.mustStopSearchingMatching(stringToParseMatchings);
                 console.log(`breakLoop: ${breakLoop}  (List constructor name: ${this.constructor.name})`);
@@ -46,12 +47,12 @@ export abstract class AOrderedPatternsList extends APatternsList {
 
         this.onAfterSearchMatchings(stringToParse);
 
-        return(this.stringToParseNextMatchingsListOrNull);
+        return(this.stringToParseNextMatchingsOrNull);
     }
 
 
     protected onPatternElementMatchingSuccess(
-        stringToParseMatchings: StringToParseMatchingsListOrNull,
+        stringToParseMatchings: StringToParseMatchingsOrNull,
         stringToParse: IStringToParse
     ): void {
         this.addStringToParseMatchingsToList(stringToParseMatchings);
@@ -69,10 +70,17 @@ export abstract class AOrderedPatternsList extends APatternsList {
     } 
     
     
-    private addStringToParseMatchingsToList(stringToParseMatchings: StringToParseMatchingsListOrNull): void {
+    private addStringToParseMatchingsToList(stringToParseMatchings: StringToParseMatchingsOrNull): void {
         this.defineStringToParseNextMatchingsListIfNotDefined();
-        this.stringToParseNextMatchingsListOrNull.addElementsFromList( stringToParseMatchings );      
+        this.stringToParseNextMatchingsOrNull.( stringToParseMatchings );      
 
     }
+
+    protected defineStringToParseNextMatchingsListIfNotDefined(): void {
+        if (this.stringToParseNextMatchingsOrNull === null) {
+            this.stringToParseNextMatchingsOrNull = this.createStringToParseMatchingsList();
+        }
+
+    }    
 
 }

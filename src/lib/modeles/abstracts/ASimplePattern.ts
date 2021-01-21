@@ -1,6 +1,6 @@
 import { StringOrNull, TypesTester } from '@ric-ng/ts-general';
 import { ISimplePattern, IStringToParse, IStringToParseMatching } from "./../interfaces";
-import { StringToParseMatchingsListOrNull } from "./../types";
+import { StringToParseMatchingsOrNull } from "./../types";
 
 import { AChildablePattern } from "./AChildablePattern";
 
@@ -59,7 +59,7 @@ export abstract class ASimplePattern extends AChildablePattern implements ISimpl
         return(this.caseSensitivity);
     }
 
-    listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull {
+    listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsOrNull {
 
         const string: string = this.getString();
         console.log(`\n\n       **** stringPattern: '${string}' (Length: ${string.length});  caseSensitivity: ${this.isCaseSensitivity()}`);
@@ -85,34 +85,32 @@ export abstract class ASimplePattern extends AChildablePattern implements ISimpl
 
         }
 
-        return (this.stringToParseNextMatchingsListOrNull);
+        return (this.stringToParseNextMatchingsOrNull);
     }
 
     
-    protected onMatchingSuccess(
+    private onMatchingSuccess(
         stringToParseMatchingAsString: string,
         stringToParse: IStringToParse
     ): void {
-        const stringToParseMatching: IStringToParseMatching = this.createStringToParseMatchingObject(
+        this.stringToParseNextMatchingsOrNull = this.createStringToParseMatchingObject(
             stringToParseMatchingAsString,
             stringToParse.getPointerPosition()
         );
 
-        this.assignStringToParseMatchingsList(stringToParseMatching);
+        // this.assignStringToParseMatchingsList(stringToParseMatching);
 
     }
 
 
-    protected onMatchingFail(): void {
+    private onMatchingFail(): void {
     }
     
 
-    private assignStringToParseMatchingsList(stringToParseMatching: IStringToParseMatching): void {
-        this.defineStringToParseNextMatchingsListIfNotDefined();        
-        this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList(
-            Array(stringToParseMatching)
-        );
-    }
+    // private assignStringToParseMatchingsList(stringToParseMatching: IStringToParseMatching): void {
+    //     this.defineStringToParseNextMatchingsListIfNotDefined();        
+    //     this.stringToParseNextMatchingsOrNull = this.createStringToParseMatchingObject();
+    // }
     
     
     private createStringToParseMatchingObject(

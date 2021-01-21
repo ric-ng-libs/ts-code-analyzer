@@ -1,5 +1,5 @@
 import { IStringToParse } from "./../interfaces";
-import { StringToParseMatchingsListOrNull } from "./../types";
+import { StringToParseMatchingsOrNull } from "./../types";
 import { AOrderedPatternsList } from "./../abstracts";
 
 export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
@@ -10,7 +10,7 @@ export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
     }    
 
     protected onPatternElementMatchingSuccess(
-        stringToParseMatchings: StringToParseMatchingsListOrNull,
+        stringToParseMatchings: StringToParseMatchingsOrNull,
         stringToParse: IStringToParse
     ): void {
 
@@ -19,11 +19,12 @@ export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
     }
 
     protected onPatternElementMatchingFail(): void {
-        console.log(`OrderedFullMatchPatternsList - onPatternElementMatchingFail() : (RE)MISE ) NULL du result (this.stringToParseNextMatchingsListOrNull) `);
-        this.stringToParseNextMatchingsListOrNull = null;
+        console.log(`OrderedFullMatchPatternsList - onPatternElementMatchingFail() : `+
+                    `(RE)MISE ) NULL du result (this.stringToParseNextMatchingsListOrNull) `);
+        this.stringToParseNextMatchingsOrNull = null;
     }    
 
-    protected mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsListOrNull): boolean {
+    protected mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsOrNull): boolean {
         const result: boolean = (stringToParseMatchings === null);
         return(result);
     }

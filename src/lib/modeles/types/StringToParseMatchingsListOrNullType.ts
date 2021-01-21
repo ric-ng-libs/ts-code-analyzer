@@ -1,3 +1,3 @@
-import { IStringToParseMatchingsList } from "../interfaces";
+import { IStringToParseMatchingsList } from "./../interfaces";
 
 export type StringToParseMatchingsListOrNull = IStringToParseMatchingsList | null;

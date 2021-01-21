@@ -1,7 +1,5 @@
 import { IPattern, IStringToParse, IStringToParseMatching, IStringToParseMatchingsList } from "./../interfaces";
-import { StringToParseMatchingsListOrNull } from "./../types";
-
-import { StringToParseMatchingsList } from "./../concreteClasses/StringToParseMatchingsList";
+import { StringToParseMatchingsListOrNull, StringToParseMatchingsOrNull } from "./../types";
 
 
 export abstract class APattern implements IPattern {
@@ -12,15 +10,19 @@ export abstract class APattern implements IPattern {
     private consecutiveMatchingsMinNumber: number = 1;
     private consecutiveMatchingsMaxNumber: number = APattern.PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE;
 
-    protected stringToParseNextMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
-    private stringToParseNextConsecutiveMatchingsListsOrNull: StringToParseMatchingsListOrNull = null;
+    protected stringToParseNextMatchingsOrNull: StringToParseMatchingsOrNull = null;
+    private stringToParseNextConsecutiveMatchingsListOrNull: StringToParseMatchingsListOrNull = null;
 
 
     constructor() {
     }
 
     //@return { StringToParseMatchingsListOrNull }
-    abstract listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
+    abstract listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsOrNull;
+
+    protected abstract createStringToParseMatchingsList(stringToParseMatchings?: Array<IStringToParseMatching>)
+        : IStringToParseMatchingsList
+    ;
 
     public debugString(indent: number = 0): string {
         let indentString: string;
@@ -44,19 +46,19 @@ export abstract class APattern implements IPattern {
         
         stringToParse.savePointerPosition();
         
-        this.stringToParseNextConsecutiveMatchingsListsOrNull = null;
+        this.stringToParseNextConsecutiveMatchingsListOrNull = null;
         console.log(`\n\n************ START root ; ${this.constructor.name} : listStringToParseNextConsecutiveMatchings **************************************`);
         this.debug();
         while( !stringToParse.isPointerAtTheEnd() ) {
-            this.stringToParseNextMatchingsListOrNull = null;
+            this.stringToParseNextMatchingsOrNull = null;
             console.log(`IN loop beginning, calling this.listStringToParseNextMatchings('${stringToParse.getStringFromPointerPosition(50)}.....')`);
             this.listStringToParseNextMatchings(stringToParse);
-            match = ( this.stringToParseNextMatchingsListOrNull !== null );
+            match = ( this.stringToParseNextMatchingsOrNull !== null );
             matchLength = undefined;
             console.log(`  *>root match= ${match}; this ; (constructor.name=${this.constructor.name}) :`);
             this.debug();
             if (match) {
-                matchLength = this.stringToParseNextMatchingsListOrNull.getTotalLength();
+                matchLength = this.stringToParseNextMatchingsOrNull.getTotalLength();
                 console.log(`  *>root match OK; matchLength = ${matchLength}`);
                 stringToParseNextConsecutiveMatchingsNumber++;
     
@@ -73,7 +75,7 @@ export abstract class APattern implements IPattern {
 
                 if (!fail) {
                     console.log(`** !!!!!!!!! OK ajout à la liste de :`);
-                    console.log(this.stringToParseNextMatchingsListOrNull.getElements());
+                    console.log(this.stringToParseNextMatchingsOrNull.getElements());
                     this.addStringToParseNextMatchingsListToConsecutiveMatchingsList();
                     // incrementValue = Math.min(matchLength,
                     //                           stringToParse.getRemainingStringToParse().length - 1);
@@ -116,44 +118,35 @@ console.log(`En sortie de while:  match= ${match}; matchLength=${matchLength} ; 
 
         if (fail) {
             console.log(`FAIL(min ou max)[  ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMinNumber}   ;   ${stringToParseNextConsecutiveMatchingsNumber} / ${this.consecutiveMatchingsMaxNumber}]   donc --> MISE A NULL du root result`);
-            this.stringToParseNextConsecutiveMatchingsListsOrNull = null;
+            this.stringToParseNextConsecutiveMatchingsListOrNull = null;
         }
 
         stringToParse.restoreLastSavedPointerPosition();
 
         console.log(`FINAL root result, for : `);
         this.debug();
-        console.log((this.stringToParseNextConsecutiveMatchingsListsOrNull)? this.stringToParseNextConsecutiveMatchingsListsOrNull.getElements() : this.stringToParseNextConsecutiveMatchingsListsOrNull);
+        console.log((this.stringToParseNextConsecutiveMatchingsListOrNull)? this.stringToParseNextConsecutiveMatchingsListOrNull.getElements() : this.stringToParseNextConsecutiveMatchingsListOrNull);
         console.log(`\n\n`);
-        return(this.stringToParseNextConsecutiveMatchingsListsOrNull);
+        return(this.stringToParseNextConsecutiveMatchingsListOrNull);
     }
 
 
     private addStringToParseNextMatchingsListToConsecutiveMatchingsList(): void {
         this.defineStringToParseNextConsecutiveMatchingsListIfNotDefined();
-        // this.stringToParseNextConsecutiveMatchingsListOrNull.addElementsFromList(
-        //     this.stringToParseNextMatchingsListOrNull
-        // );
-        this.stringToParseNextConsecutiveMatchingsListsOrNull.addElement(
-            this.stringToParseNextMatchingsListOrNull
+
+        this.stringToParseNextConsecutiveMatchingsListOrNull.addStringToParseMatching(
+            this.stringToParseNextMatchingsOrNull
         );
 
     }
 
-    protected defineStringToParseNextConsecutiveMatchingsListIfNotDefined(): void {
-        if (this.stringToParseNextConsecutiveMatchingsListsOrNull === null) {
-            this.stringToParseNextConsecutiveMatchingsListsOrNull = this.createStringToParseMatchingsList();
+    private defineStringToParseNextConsecutiveMatchingsListIfNotDefined(): void {
+        if (this.stringToParseNextConsecutiveMatchingsListOrNull === null) {
+            this.stringToParseNextConsecutiveMatchingsListOrNull = this.createStringToParseMatchingsList();
         }
 
-    }     
-
-    protected defineStringToParseNextMatchingsListIfNotDefined(): void {
-        if (this.stringToParseNextMatchingsListOrNull === null) {
-            this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList();
-        }
-
-    } 
-
+    }
+    
 
     setConsecutiveMatchingsMinNumber(consecutiveMatchingsMinNumber: number): IPattern {
         this.consecutiveMatchingsMinNumber = consecutiveMatchingsMinNumber;

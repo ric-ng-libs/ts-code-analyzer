@@ -17,11 +17,13 @@ export abstract class AChildablePattern extends APattern implements IChildablePa
         return(this.parentPattern);
     }
 
-    protected createStringToParseMatchingsList(stringToParseMatchingq: Array<IStringToParseMatching> = [])
+    protected createStringToParseMatchingsList(stringToParseMatchings: Array<IStringToParseMatching> = [])
         : IStringToParseMatchingsList {
 
-        const result: IStringToParseMatchingsList = new StringToParseMatchingsList(this, stringToParseMatchingq);
+        const result: IStringToParseMatchingsList = new StringToParseMatchingsList(this, stringToParseMatchings);
         return(result);
 
-    }    
+    }        
+
+    
 }
