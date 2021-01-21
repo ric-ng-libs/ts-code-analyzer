@@ -1,10 +1,11 @@
 import { StringOrNull, TypesTester } from '@ric-ng/ts-general';
-import { ISimplePattern, IStringToParse, IStringToParseMatching } from "./../interfaces";
-import { StringToParseMatchingsOrNull } from "./../types";
+
+import { IStringToParseSimpleMatchingOrNull, IStringToParseMatchingOrNull } from "./../types";
+import { ISimplePattern, IStringToParse, IStringToParseSimpleMatching } from "./../interfaces";
 
 import { AChildablePattern } from "./AChildablePattern";
 
-import { StringToParseMatching } from "./../concreteClasses/StringToParseMatching";
+import { StringToParseSimpleMatching } from "./../concreteClasses/StringToParseSimpleMatching";
 
 
 export abstract class ASimplePattern extends AChildablePattern implements ISimplePattern {
@@ -13,6 +14,8 @@ export abstract class ASimplePattern extends AChildablePattern implements ISimpl
 
     private string: string;
     private caseSensitivity: boolean;
+
+    private stringToParseNextSimpleMatchingOrNull: IStringToParseSimpleMatchingOrNull;
 
     
     static setDefaultCaseSensitivity(caseSensitivity: boolean): void {
@@ -24,15 +27,17 @@ export abstract class ASimplePattern extends AChildablePattern implements ISimpl
     protected abstract getStringToCompare(stringToParseAsString: string): string;
 
     protected abstract getStringToParseMatching(stringToCompare: string): StringOrNull;
-        
-    public debugString(indent: number = 0): string {
-        let indentString: string;
-        indentString=" ".repeat(indent);
-        return(
-            super.debugString(indent)+"  /  "+
-            `: '${this.getString()}'(${this.getString().length})  /  caseSensitivity: ${this.isCaseSensitivity()}`
-        );
-    }
+    
+    
+public debugString(indent: number = 0): string {
+    let indentString: string;
+    indentString=" ".repeat(indent);
+    return(
+        super.debugString(indent)+"  /  "+
+        `: '${this.getString()}'(${this.getString().length})  /  caseSensitivity: ${this.isCaseSensitivity()}`
+    );
+}
+
 
     constructor(string: string, caseSensitivity: boolean = ASimplePattern.defaultCaseSensitivity) {
         super();
@@ -59,33 +64,36 @@ export abstract class ASimplePattern extends AChildablePattern implements ISimpl
         return(this.caseSensitivity);
     }
 
-    listStringToParseNextMatchings(stringToParse: IStringToParse): StringToParseMatchingsOrNull {
+    
+    getStringToParseNextMatching(stringToParse: IStringToParse): IStringToParseMatchingOrNull {
+        this.stringToParseNextSimpleMatchingOrNull = null;
 
         const string: string = this.getString();
-        console.log(`\n\n       **** stringPattern: '${string}' (Length: ${string.length});  caseSensitivity: ${this.isCaseSensitivity()}`);
+console.log(`\n\n       **** stringPattern: '${string}' (Length: ${string.length});  caseSensitivity: ${this.isCaseSensitivity()}`);
         const stringToParseAsString: string = stringToParse.getRemainingStringToParse();
         let stringToCompare: string;
         let stringToParseMatching: StringOrNull;
         if ((string !== "") && (stringToParseAsString.length >= this.getStringToParseMinimalLength())) {
-            console.log(`       stringToParseAsString: '${stringToParseAsString}'   (${stringToParseAsString.length})`);
+console.log(`       stringToParseAsString: '${stringToParseAsString}'   (${stringToParseAsString.length})`);
             
             stringToCompare = this.getStringToCompare(stringToParseAsString);
-            console.log(`       stringToCompare: '${stringToCompare}'  (${stringToCompare.length})`);
+console.log(`       stringToCompare: '${stringToCompare}'  (${stringToCompare.length})`);
             stringToParseMatching = this.getStringToParseMatching(stringToCompare);
-            console.log(`       >>> stringToParseMatching: '${stringToParseMatching}'`, "<<<\n\n");
+console.log(`       >>> stringToParseMatching: '${stringToParseMatching}'`, "<<<\n\n");
             if ((stringToParseMatching !== null) /*&& (stringToParseMatching.length>0)*/) {
-                console.log(`       >>> stringToParseMatching not null: '${stringToParseMatching}' (${stringToParseMatching.length})`, "<<<\n\n");
-                console.log(`       onMatchingSuccess ASimplePattern !! true`);
+console.log(`       >>> stringToParseMatching not null: '${stringToParseMatching}' `
+                            +`(${stringToParseMatching.length})`, "<<<\n\n");
+console.log(`       onMatchingSuccess ASimplePattern !! true`);
                 this.onMatchingSuccess(stringToParseMatching, stringToParse);
                 
             }  else {
-                console.log(`       onMatchingFAIL ASimplePattern !`);
+console.log(`       onMatchingFAIL ASimplePattern !`);
                 this.onMatchingFail();
             }
 
         }
 
-        return (this.stringToParseNextMatchingsOrNull);
+        return (this.stringToParseNextSimpleMatchingOrNull);
     }
 
     
@@ -93,12 +101,10 @@ export abstract class ASimplePattern extends AChildablePattern implements ISimpl
         stringToParseMatchingAsString: string,
         stringToParse: IStringToParse
     ): void {
-        this.stringToParseNextMatchingsOrNull = this.createStringToParseMatchingObject(
+        this.stringToParseNextSimpleMatchingOrNull = this.createStringToParseSimpleMatching(
             stringToParseMatchingAsString,
             stringToParse.getPointerPosition()
         );
-
-        // this.assignStringToParseMatchingsList(stringToParseMatching);
 
     }
 
@@ -106,20 +112,13 @@ export abstract class ASimplePattern extends AChildablePattern implements ISimpl
     private onMatchingFail(): void {
     }
     
-
-    // private assignStringToParseMatchingsList(stringToParseMatching: IStringToParseMatching): void {
-    //     this.defineStringToParseNextMatchingsListIfNotDefined();        
-    //     this.stringToParseNextMatchingsOrNull = this.createStringToParseMatchingObject();
-    // }
-    
-    
-    private createStringToParseMatchingObject(
-        stringToParseMatching: string,
+    private createStringToParseSimpleMatching(
+        stringToParseMatchingAsString: string,
         stringToParsePointerPosition: number, 
-    ): IStringToParseMatching {
-        const result: IStringToParseMatching = new StringToParseMatching(
+    ): IStringToParseSimpleMatching {
+        const result: IStringToParseSimpleMatching = new StringToParseSimpleMatching(
             this, 
-            stringToParseMatching,
+            stringToParseMatchingAsString,
             stringToParsePointerPosition
         );
         return(result);

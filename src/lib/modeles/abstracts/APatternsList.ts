@@ -1,34 +1,41 @@
 import { GenericList } from "@ric-ng/ts-general";
-import { IChildablePattern, IPatternsList } from "./../interfaces";
+
+import { IStringToParseMatchingsListOrNull } from './../types';
+import { IChildablePattern, IPatternsList, IStringToParseMatchingsList, IStringToParse } from "./../interfaces";
+
 import { AChildablePattern } from "./AChildablePattern";
+
 
 
 export abstract class APatternsList extends AChildablePattern implements IPatternsList {
 
     protected list: GenericList<IChildablePattern>;
 
+    protected stringToParseNextMatchingsListOrNull: IStringToParseMatchingsListOrNull;
 
-    public debugString(indent: number = 0): string {
-        let index: number = 0;
-        let indentString: string;
-        indentString=" ".repeat(indent);
 
-        const infos: Array<string> = [];
-        infos.push(`${super.debugString()} ; elems: [ (${this.list.getElementsNumber()}) \n`);
-        for(const element of this.list.getElements()) {
-            infos.push( `    ${indentString}[${index++}]=> ${element.debugString(indent+4)}`  );
-        }
-        infos.push(`${indentString}]\n\n`);
+public debugString(indent: number = 0): string {
+    let index: number = 0;
+    let indentString: string;
+    indentString=" ".repeat(indent);
 
-        return( infos.join("\n") );
-
+    const infos: Array<string> = [];
+    infos.push(`${super.debugString()} ; elems: [ (${this.list.getElementsNumber()}) \n`);
+    for(const element of this.list.getElements()) {
+        infos.push( `    ${indentString}[${index++}]=> ${element.debugString(indent+4)}`  );
     }
+    infos.push(`${indentString}]\n\n`);
 
-    protected debug(): void {
-        super.debug();
-        // console.log(this.list.getElements());
-        console.log(`\n`);
-    }     
+    return( infos.join("\n") );
+
+}
+protected debug(): void {
+    super.debug();
+    // console.log(this.list.getElements());
+    console.log(`\n`);
+}     
+
+    
 
     constructor(patterns: Array<IChildablePattern> = []) {
         super();
@@ -80,5 +87,40 @@ export abstract class APatternsList extends AChildablePattern implements IPatter
         }
         return(this);
     }
+
+
+
+    protected onPatternElementMatchingSuccess(
+        stringToParseMatchingsList: IStringToParseMatchingsList,
+        stringToParse: IStringToParse
+    ): void {
+        this.addStringToParseMatchingsList(stringToParseMatchingsList);
+
+    }
+
+    protected onPatternElementMatchingFail(): void {
+
+    }
+
+
+    protected onBeforeSearchMatchings(stringToParse: IStringToParse): void {
+    }
+
+    protected onAfterSearchMatchings(stringToParse: IStringToParse): void {
+    } 
+    
+    
+    private addStringToParseMatchingsList(stringToParseMatchingsList: IStringToParseMatchingsList): void {
+        this.defineStringToParseNextMatchingsListIfNotDefined();
+        this.stringToParseNextMatchingsListOrNull.addStringToParseMatching( stringToParseMatchingsList );      
+
+    }
+
+    private defineStringToParseNextMatchingsListIfNotDefined(): void {
+        if (this.stringToParseNextMatchingsListOrNull === null) {
+            this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList();
+        }
+
+    }     
 
 }

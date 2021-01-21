@@ -1,11 +1,11 @@
+import { IStringToParseMatchingsListOrNull } from "./../types";
 import { IStringToParse } from "./IStringToParse";
-import { StringToParseMatchingsListOrNull } from "./../types";
 
 
 export interface IPattern {
 
-    //@return { StringToParseMatchingsListOrNull } null if fails, id est the consecutive matchings number is out of range ([min, max]).
-    listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): StringToParseMatchingsListOrNull;
+    //@return {IStringToParseMatchingsListOrNull} null if fails, id est : if the consecutive matchings number is out of range ([min, max]).
+    listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): IStringToParseMatchingsListOrNull;
 
     setConsecutiveMatchingsMinNumber(consecutiveMatchingsMinNumber: number): IPattern;
     getConsecutiveMatchingsMinNumber(): number;

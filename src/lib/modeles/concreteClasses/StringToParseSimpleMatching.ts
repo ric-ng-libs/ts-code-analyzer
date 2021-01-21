@@ -1,11 +1,14 @@
 import { NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
 
-import { IChildablePattern, IStringToParseMatching } from "./../interfaces";
-import { AStringToParseMatching } from './../abstracts';
+import { IChildablePattern, IStringToParseSimpleMatching } from "./../interfaces";
+
+import { AStringToParseMatching } from './../abstracts/AStringToParseMatching';
 
 
-export class StringToParseMatching extends AStringToParseMatching implements IStringToParseMatching {
-
+export class StringToParseSimpleMatching
+    extends  AStringToParseMatching
+    implements IStringToParseSimpleMatching {
+    
     private pointerPosition: NumberOrNull = null;
 
 

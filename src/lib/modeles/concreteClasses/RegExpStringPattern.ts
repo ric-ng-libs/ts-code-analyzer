@@ -20,9 +20,9 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
         let result: StringOrNull;
         
         const regExp: RegExp = this.getRegExp();
-        console.log("           RegExp: ", regExp);
+console.log("           RegExp: ", regExp);
         const matchResult: Array<string> = stringToCompare.match(regExp);
-        console.log("           RegExpPattern matchResult: ", matchResult);
+console.log("           RegExpPattern matchResult: ", matchResult);
 
         result = ( (matchResult !== null) /*&& (match[0].length>0)*/ )? matchResult[0] : null;
 
@@ -43,7 +43,7 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
     }
     private getRegExp(): RegExp {
         const regExpString: string = this.getString();
-        console.log(`           regExpString: '${regExpString}'`);
+console.log(`           regExpString: '${regExpString}'`);
         const regExpOptions: string = this.getRegExpOptions();
         const result: RegExp = new RegExp(`^${regExpString}`, regExpOptions);
         return (result);

@@ -12,6 +12,7 @@ export * from './IPatternsFactory';
 
 export * from './IStringToParse';
 export * from './IStringToParseMatching';
+export * from './IStringToParseSimpleMatching';
 export * from './IStringToParseMatchingsList';
 
 export * from './IParser';

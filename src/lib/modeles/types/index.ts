@@ -1,2 +1,3 @@
-export * from './StringToParseMatchingsOrNull';
+export * from './StringToParseMatchingOrNull';
+export * from './StringToParseSimpleMatchingOrNullType';
 export * from './StringToParseMatchingsListOrNullType';

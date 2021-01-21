@@ -1,6 +1,7 @@
-import { IStringToParse } from "./../interfaces";
-import { StringToParseMatchingsOrNull } from "./../types";
+import { IStringToParseMatchingsListOrNull } from "./../types";
+import { IStringToParse, IStringToParseMatchingsList } from "./../interfaces";
 import { AOrderedPatternsList } from "./../abstracts";
+
 
 export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
 
@@ -9,25 +10,28 @@ export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
         stringToParse.savePointerPosition();
     }    
 
+
     protected onPatternElementMatchingSuccess(
-        stringToParseMatchings: StringToParseMatchingsOrNull,
+        stringToParseMatchingsList: IStringToParseMatchingsList,
         stringToParse: IStringToParse
     ): void {
 
-        super.onPatternElementMatchingSuccess(stringToParseMatchings, stringToParse);
-        stringToParse.incrementPointerPosition(stringToParseMatchings.getTotalLength());
+        super.onPatternElementMatchingSuccess(stringToParseMatchingsList, stringToParse);
+        stringToParse.incrementPointerPosition(stringToParseMatchingsList.getTotalLength());
     }
 
     protected onPatternElementMatchingFail(): void {
-        console.log(`OrderedFullMatchPatternsList - onPatternElementMatchingFail() : `+
-                    `(RE)MISE ) NULL du result (this.stringToParseNextMatchingsListOrNull) `);
-        this.stringToParseNextMatchingsOrNull = null;
+console.log(`OrderedFullMatchPatternsList - onPatternElementMatchingFail() : `+
+            `(RE)MISE ) NULL du result (this.stringToParseNextMatchingsListOrNull) `);
+        this.stringToParseNextMatchingsListOrNull = null;
     }    
 
-    protected mustStopSearchingMatching(stringToParseMatchings: StringToParseMatchingsOrNull): boolean {
-        const result: boolean = (stringToParseMatchings === null);
+
+    protected mustStopSearchingMatching(stringToParseMatchingsListOrNull: IStringToParseMatchingsListOrNull): boolean {
+        const result: boolean = (stringToParseMatchingsListOrNull === null);
         return(result);
     }
+
 
     protected onAfterSearchMatchings(stringToParse: IStringToParse): void {
         super.onAfterSearchMatchings(stringToParse);

@@ -1,3 +1,5 @@
+import { StringOrNull } from '@ric-ng/ts-general';
+
 import { IChildablePattern } from './../interfaces';
 
 
@@ -20,7 +22,8 @@ export abstract class AStringToParseMatching {
     }
 
     getTotalLength(useCache: boolean = true): number {
-        const result: number = this.getAsString(useCache).length;
+        const asString: StringOrNull = this.getAsString(useCache);
+        const result: number = (asString !== null)? asString.length : 0;
         return(result);
     }
     

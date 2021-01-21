@@ -9,7 +9,7 @@ export * from './OrderedOneMatchPatternsList';
 export * from './PatternsFactory';
 
 export * from './StringToParse';
-export * from './StringToParseMatching';
+export * from './StringToParseSimpleMatching';
 export * from './StringToParseMatchingsList';
 
 export * from './LanguageTypescriptTokensProvider';

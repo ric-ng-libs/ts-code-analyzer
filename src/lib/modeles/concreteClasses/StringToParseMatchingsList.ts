@@ -2,7 +2,7 @@ import { GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
 
 import { IStringToParseMatching, IStringToParseMatchingsList, IChildablePattern } from './../interfaces';
 
-import { AStringToParseMatching } from './../abstracts';
+import { AStringToParseMatching } from './../abstracts/AStringToParseMatching';
 
 
 export class StringToParseMatchingsList 
@@ -20,7 +20,7 @@ export class StringToParseMatchingsList
         this.createList(stringToParseMatchings);
     }        
 
-    private createList(stringToParseMatchings: Array<IStringToParseMatching> = []) {
+    private createList(stringToParseMatchings: Array<IStringToParseMatching> = []): void {
         if (stringToParseMatchings !== null) {
             this.list = new GenericList<IStringToParseMatching>(stringToParseMatchings);
             this.list.setAllowNullElement(false);
@@ -63,7 +63,7 @@ export class StringToParseMatchingsList
 
 
     getPointerPosition(): NumberOrNull {
-        const result: NumberOrNull = (this.list.getElementsNumber()>0)? this.list.getElementByIndex(0).getPointerPosition() : null;
+        const result: NumberOrNull = (!this.list.isEmpty())? this.list.getElementByIndex(0).getPointerPosition() : null;
         return(result);
     }      
     
