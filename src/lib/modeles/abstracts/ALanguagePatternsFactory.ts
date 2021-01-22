@@ -53,7 +53,8 @@ export abstract class ALanguagePatternsFactory {
             this.getCRToken(),
             this.getLFToken()
             
-        ], 1, null);        
+        ], 1, null)
+        .setDebugInfo("CRLFs...");       
 
         return(result);
     }    
@@ -64,7 +65,8 @@ export abstract class ALanguagePatternsFactory {
             this.getSpaceToken(),
             this.getCRLFToken()
             
-        ], ((optional)? 0:1), null );
+        ], ((optional)? 0:1), null )
+        .setDebugInfo("SPACINGS");
 
         return(result);
     }     
@@ -124,7 +126,8 @@ export abstract class ALanguagePatternsFactory {
             this.getExportToken(),
             this.getSpacingToken(false)
             
-        ], 0, 1);
+        ], 0, 1)
+        .setDebugInfo("EXPORT");
 
         return(result);
 
@@ -136,7 +139,8 @@ export abstract class ALanguagePatternsFactory {
             this.getAbstractClassToken(),
             this.getSpacingToken(false)
             
-        ], 0, 1);
+        ], 0, 1)
+        .setDebugInfo("ABSTRACT");
 
         return(result);
 
@@ -148,7 +152,8 @@ export abstract class ALanguagePatternsFactory {
             this.getIdentifierToken(),
             this.getSpacingToken(true)
             
-        ], 1, 1);
+        ], 1, 1)
+        .setDebugInfo("IDENTIFIER");
 
         return(result);
 

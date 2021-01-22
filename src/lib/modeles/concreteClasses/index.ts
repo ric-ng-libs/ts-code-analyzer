@@ -14,3 +14,4 @@ export * from './StringToParseMatchingsList';
 
 export * from './LanguageTypescriptTokensProvider';
 export * from './LanguageTypescriptPatternsFactory';
+export * from './LanguageTypescriptStringToParseMatchingInterpreter';

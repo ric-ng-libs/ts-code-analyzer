@@ -1,4 +1,4 @@
-import { GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
+import { IGenericList, GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
 
 import { IStringToParseMatching, IStringToParseMatchingsList, IChildablePattern } from './../interfaces';
 
@@ -34,11 +34,6 @@ export class StringToParseMatchingsList
         return(this.asString);
     }
 
-    addStringToParseMatching(stringToParseMatching: IStringToParseMatching): IStringToParseMatchingsList {
-        this.list.addElement(stringToParseMatching);
-        return(this);
-    }
-
     private computeGetAsString(useCache: boolean): StringOrNull {
         let result: StringOrNull = null;
 
@@ -65,7 +60,29 @@ export class StringToParseMatchingsList
     getPointerPosition(): NumberOrNull {
         const result: NumberOrNull = (!this.list.isEmpty())? this.list.getElementByIndex(0).getPointerPosition() : null;
         return(result);
-    }      
+    }
     
+    
+    interpret(): IStringToParseMatchingsList {
+
+        this.list.each(
+            (stringToParseMatching: IStringToParseMatching) => {
+                // console.log(stringToParseMatching.getPattern());
+                console.log(stringToParseMatching.getPattern().getLanguageStringToParseMatchingInterpreter());                
+                stringToParseMatching.interpret();
+            }
+        );
+
+        return(this);
+    }
+        
+    getList(): IGenericList<IStringToParseMatching> {
+        return(this.list);
+    }
+
+    addStringToParseMatching(stringToParseMatching: IStringToParseMatching): IStringToParseMatchingsList {
+        this.list.addElement(stringToParseMatching);
+        return(this);
+    }
     
 }

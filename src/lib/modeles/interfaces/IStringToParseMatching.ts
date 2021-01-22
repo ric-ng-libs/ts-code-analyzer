@@ -10,5 +10,7 @@ export interface IStringToParseMatching {
     getPointerPosition(): NumberOrNull;
     getAsString(useCache?: boolean): StringOrNull;
     getTotalLength(useCache?: boolean): NumberOrNull;
+
+    interpret(): IStringToParseMatching;
     
 }

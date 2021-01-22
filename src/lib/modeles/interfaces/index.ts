@@ -15,7 +15,9 @@ export * from './IStringToParseMatching';
 export * from './IStringToParseSimpleMatching';
 export * from './IStringToParseMatchingsList';
 
+
 export * from './IParser';
 
 export * from './ILanguageTokensProvider';
 export * from './ILanguagePatternsFactory';
+export * from './ILanguageStringToParseMatchingInterpreter';

@@ -3,7 +3,7 @@ import { IPattern, IStringToParse, IStringToParseMatching, IStringToParseMatchin
 
 
 export abstract class APattern implements IPattern {
-
+    
     private static readonly PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER: number = 50;
     private static readonly PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE: number = null;
 
@@ -208,6 +208,5 @@ console.log(`\n\n`);
 
         return (result);
     }
-
 
 }

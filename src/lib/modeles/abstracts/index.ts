@@ -13,3 +13,4 @@ export * from './AParser';
 
 export * from './ALanguageTokensProvider';
 export * from './ALanguagePatternsFactory';
+export * from './ALanguageStringToParseMatchingInterpreter';
