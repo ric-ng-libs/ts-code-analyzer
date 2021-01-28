@@ -1,10 +1,8 @@
-import { NumberOrNull } from '@ric-ng/ts-general';
+import { StringOrNull, NumberOrNull } from '@ric-ng/ts-general';
 
 import { 
-    IChildablePattern, 
+    IPattern, 
     IStringToParseSimpleMatching, 
-    IStringToParseMatching, 
-    ILanguageStringToParseMatchingInterpreter 
 } from "./../interfaces";
 
 import { AStringToParseMatching } from './../abstracts/AStringToParseMatching';
@@ -18,7 +16,7 @@ export class StringToParseSimpleMatching
 
 
     constructor(
-        pattern: IChildablePattern, 
+        pattern: IPattern, 
         stringToParseMatching: string,
         pointerPosition: number
     ) {
@@ -29,7 +27,7 @@ export class StringToParseSimpleMatching
     }
    
 
-    getAsString(): string {
+    getAsString(): StringOrNull {
         return(this.asString);
     }
     private setAsString(asString: string): void {
@@ -42,21 +40,9 @@ export class StringToParseSimpleMatching
         return(this.pointerPosition);
     }    
     private setPointerPosition(pointerPosition: number): void {
-        this.pointerPosition = pointerPosition;
-    }
-
-    interpret(): IStringToParseMatching {
-        const languageStringToParseMatchingInterpreter: ILanguageStringToParseMatchingInterpreter = 
-            this.getPattern().getLanguageStringToParseMatchingInterpreter();
-
-        if (languageStringToParseMatchingInterpreter !== null) {
-            console.log(`\nINTERPRETING FOR `);
-            console.log(this);
-            languageStringToParseMatchingInterpreter.interpret(this);
+        if (pointerPosition !== null) {
+            this.pointerPosition = pointerPosition;
         }
-        
-        return(this);
     }
-
 
 }

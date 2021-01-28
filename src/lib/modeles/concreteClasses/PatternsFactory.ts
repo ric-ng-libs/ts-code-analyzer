@@ -1,5 +1,5 @@
 import { 
-    IChildablePattern, 
+    IPattern, 
     IPatternsFactory,
     IStringPattern,
     IRegExpStringPattern,
@@ -57,7 +57,7 @@ export class PatternsFactory implements IPatternsFactory {
 
 
     getOrderedFullMatchPatternsList(
-        patterns: Array<IChildablePattern>, 
+        patterns: Array<IPattern>, 
         consecutiveMatchingsMinNumber: number = 1,
         consecutiveMatchingsMaxNumber: number = null
     ): IPatternsList {
@@ -71,14 +71,14 @@ export class PatternsFactory implements IPatternsFactory {
 
         return(result);
     }
-    private createOrderedFullMatchPatternsList(patterns: Array<IChildablePattern>): OrderedFullMatchPatternsList {
+    private createOrderedFullMatchPatternsList(patterns: Array<IPattern>): OrderedFullMatchPatternsList {
         const result: OrderedFullMatchPatternsList = new OrderedFullMatchPatternsList(patterns);
         return(result);
     }
     
     
     getOrderedOneMatchPatternsList(
-        patterns: Array<IChildablePattern>, 
+        patterns: Array<IPattern>, 
         consecutiveMatchingsMinNumber: number = 1,
         consecutiveMatchingsMaxNumber: number = null
     ): IPatternsList {
@@ -92,7 +92,7 @@ export class PatternsFactory implements IPatternsFactory {
 
         return(result);
     }
-    private createOrderedOneMatchPatternsList(patterns: Array<IChildablePattern>): OrderedOneMatchPatternsList {
+    private createOrderedOneMatchPatternsList(patterns: Array<IPattern>): OrderedOneMatchPatternsList {
         const result: OrderedOneMatchPatternsList = new OrderedOneMatchPatternsList(patterns);
         return(result);
     }     

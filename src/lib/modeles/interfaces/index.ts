@@ -1,7 +1,7 @@
+export * from './debug';
 export * from './OOP';
 
 export * from './IPattern';
-export * from './IChildablePattern';
 export * from './ISimplePattern';
 export * from './IStringPattern';
 export * from './IRegExpStringPattern';

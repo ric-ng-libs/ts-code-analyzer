@@ -1,8 +1,8 @@
-import { IChildablePattern } from './IChildablePattern';
+import { IPattern } from './IPattern';
 
 
 export interface ILanguagePatternsFactory {
 
-    getClass(): IChildablePattern;
+    getClass(): IPattern;
     
 }

@@ -1,36 +1,36 @@
-import { ILanguagePatternsFactory, IChildablePattern, ILanguageStringToParseMatchingInterpreter } from './../interfaces';
+import { 
+    ILanguagePatternsFactory, 
+    IPattern
+} from './../interfaces';
 
 import { ALanguagePatternsFactory } from './../abstracts';
 
-import { LanguageTypescriptStringToParseMatchingInterpreter } from './LanguageTypescriptStringToParseMatchingInterpreter';
 
 
 export class LanguageTypescriptPatternsFactory extends ALanguagePatternsFactory implements ILanguagePatternsFactory {
 
+    
+    getClass(): IPattern {
 
-    getClass(): IChildablePattern {
-        const  languageStringToParseMatchingInterpreter: ILanguageStringToParseMatchingInterpreter = 
-            new LanguageTypescriptStringToParseMatchingInterpreter();
-
-        const result: IChildablePattern = this.patternsFactory.getOrderedFullMatchPatternsList([
-            this.getSpacingToken(true),
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+            // this.getSpacingToken(true),
             
-            this.getExport().setLanguageStringToParseMatchingInterpreter(languageStringToParseMatchingInterpreter),
+            this.getExport().setLanguageStringToParseMatchingInterpreter(this.languageStringToParseMatchingInterpreter),
 
-            this.getAbstract().setLanguageStringToParseMatchingInterpreter(languageStringToParseMatchingInterpreter),
+            // this.getAbstract().setLanguageStringToParseMatchingInterpreter(this.languageStringToParseMatchingInterpreter),
             
-            this.getClassToken(),
-            this.getSpacingToken(false),
+            // this.getClassToken(),
+            // this.getSpacingToken(false),
 
-            this.getIdentifier().setLanguageStringToParseMatchingInterpreter(languageStringToParseMatchingInterpreter),
+            // this.getIdentifier().setLanguageStringToParseMatchingInterpreter(this.languageStringToParseMatchingInterpreter),
 
-            this.getBlockStart(),
+            // this.getBlockStart(),
             
-            this.getBlockEnd()
+            // this.getBlockEnd()
 
         ], 0, null)
-        .setLanguageStringToParseMatchingInterpreter(languageStringToParseMatchingInterpreter)
-        .setDebugInfo("CLASS");
+        .setLanguageStringToParseMatchingInterpreter(this.languageStringToParseMatchingInterpreter)
+        .setDebugInfosTypeId("CLASS");
         
         return(result);        
     }

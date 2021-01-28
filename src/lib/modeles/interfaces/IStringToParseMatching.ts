@@ -1,16 +1,16 @@
 import { NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
 
-import { IChildablePattern } from "./IChildablePattern";
+import { IPattern } from "./IPattern";
 
 
 export interface IStringToParseMatching {
     
-    getPattern(): IChildablePattern;
+    getPattern(): IPattern;
+    interpret(): IStringToParseMatching;
 
     getPointerPosition(): NumberOrNull;
     getAsString(useCache?: boolean): StringOrNull;
     getTotalLength(useCache?: boolean): NumberOrNull;
 
-    interpret(): IStringToParseMatching;
     
 }

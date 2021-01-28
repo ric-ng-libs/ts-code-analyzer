@@ -1,6 +1,6 @@
 import { IGenericList, GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
 
-import { IStringToParseMatching, IStringToParseMatchingsList, IChildablePattern } from './../interfaces';
+import { IStringToParseMatching, IStringToParseMatchingsList, IPattern } from './../interfaces';
 
 import { AStringToParseMatching } from './../abstracts/AStringToParseMatching';
 
@@ -12,7 +12,7 @@ export class StringToParseMatchingsList
     private list: GenericList<IStringToParseMatching>;
 
     constructor(
-        pattern: IChildablePattern, 
+        pattern: IPattern, 
         stringToParseMatchings: Array<IStringToParseMatching> = []
     ) {
         super(pattern);
@@ -64,20 +64,18 @@ export class StringToParseMatchingsList
     
     
     interpret(): IStringToParseMatchingsList {
+        super.interpret();
+        this.interpretChildren();
+        return(this);
+    }
+    private interpretChildren(): void {
 
         this.list.each(
             (stringToParseMatching: IStringToParseMatching) => {
-                // console.log(stringToParseMatching.getPattern());
-                console.log(stringToParseMatching.getPattern().getLanguageStringToParseMatchingInterpreter());                
                 stringToParseMatching.interpret();
             }
         );
-
-        return(this);
-    }
         
-    getList(): IGenericList<IStringToParseMatching> {
-        return(this.list);
     }
 
     addStringToParseMatching(stringToParseMatching: IStringToParseMatching): IStringToParseMatchingsList {

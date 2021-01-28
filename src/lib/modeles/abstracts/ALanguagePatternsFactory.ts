@@ -1,11 +1,18 @@
-import { IChildablePattern, IPatternsFactory, ILanguageTokensProvider } from './../interfaces';
+import { 
+    IPattern, 
+    IPatternsFactory, 
+    ILanguageTokensProvider, 
+    ILanguageStringToParseMatchingInterpreter 
+} from './../interfaces';
+
 import { ASimplePattern } from './ASimplePattern';
 
 export abstract class ALanguagePatternsFactory {
 
     constructor(
         protected patternsFactory: IPatternsFactory,
-        private languageTokensProvider: ILanguageTokensProvider
+        private languageTokensProvider: ILanguageTokensProvider,
+        protected languageStringToParseMatchingInterpreter: ILanguageStringToParseMatchingInterpreter
     ) {
         this.setCaseSensitivity();
     }
@@ -20,32 +27,32 @@ export abstract class ALanguagePatternsFactory {
     }
     
 
-    protected getCRToken(maxOccurencesNumber: number = null): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern( 
+    protected getCRToken(maxOccurencesNumber: number = null): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern( 
             this.languageTokensProvider.getCR(),
             1, maxOccurencesNumber
         );
         return(result);
     }
     
-    protected getLFToken(maxOccurencesNumber: number = null): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern( 
+    protected getLFToken(maxOccurencesNumber: number = null): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern( 
             this.languageTokensProvider.getLF(),
             1, maxOccurencesNumber
         );
         return(result);
     }
 
-    protected getSpaceToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern( 
+    protected getSpaceToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern( 
             this.languageTokensProvider.getSpace(),
             1, null
         );
         return(result);
     }
 
-    protected getCRLFToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getOrderedOneMatchPatternsList([
+    protected getCRLFToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedOneMatchPatternsList([
             this.patternsFactory.getOrderedFullMatchPatternsList([
                 this.getCRToken(1),
                 this.getLFToken(1)
@@ -54,42 +61,42 @@ export abstract class ALanguagePatternsFactory {
             this.getLFToken()
             
         ], 1, null)
-        .setDebugInfo("CRLFs...");       
+        .setDebugInfosTypeId("CRLFs...");       
 
         return(result);
     }    
     
-    protected getSpacingToken(optional: boolean): IChildablePattern {
+    protected getSpacingToken(optional: boolean): IPattern {
         
-        const result: IChildablePattern = this.patternsFactory.getOrderedOneMatchPatternsList([
+        const result: IPattern = this.patternsFactory.getOrderedOneMatchPatternsList([
             this.getSpaceToken(),
             this.getCRLFToken()
             
         ], ((optional)? 0:1), null )
-        .setDebugInfo("SPACINGS");
+        .setDebugInfosTypeId("SPACINGS");
 
         return(result);
     }     
 
 
-    protected getExportToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern( 
+    protected getExportToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern( 
             this.languageTokensProvider.getExport(),
             1, 1
         );
         return(result);
     }     
 
-    protected getAbstractClassToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern( 
+    protected getAbstractClassToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern( 
             this.languageTokensProvider.getAbstractClass(),
             1, 1
         );
         return(result);
     }
     
-    protected getClassToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern( 
+    protected getClassToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern( 
             this.languageTokensProvider.getClass(),
             1, 1
         );
@@ -97,23 +104,23 @@ export abstract class ALanguagePatternsFactory {
     }
 
 
-    protected getIdentifierToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getRegExpStringPattern(
+    protected getIdentifierToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getRegExpStringPattern(
             this.languageTokensProvider.getIdentifier(),
             1, 1
         );
         return(result);
     }
 
-    protected getBlockStartToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern(
+    protected getBlockStartToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern(
             this.languageTokensProvider.getBlockStart(),
             1, 1
         );
         return(result);
     }
-    protected getBlockEndToken(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getStringPattern(
+    protected getBlockEndToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern(
             this.languageTokensProvider.getBlockEnd(),
             1, 1
         );
@@ -121,46 +128,46 @@ export abstract class ALanguagePatternsFactory {
     }     
 
 
-    protected getExport(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+    protected getExport(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
             this.getExportToken(),
-            this.getSpacingToken(false)
+            // this.getSpacingToken(false)
             
         ], 0, 1)
-        .setDebugInfo("EXPORT");
+        .setDebugInfosTypeId("EXPORT");
 
         return(result);
 
     }    
  
 
-    protected getAbstract(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+    protected getAbstract(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
             this.getAbstractClassToken(),
             this.getSpacingToken(false)
             
         ], 0, 1)
-        .setDebugInfo("ABSTRACT");
+        .setDebugInfosTypeId("ABSTRACT");
 
         return(result);
 
     }
     
 
-    protected getIdentifier(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+    protected getIdentifier(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
             this.getIdentifierToken(),
             this.getSpacingToken(true)
             
         ], 1, 1)
-        .setDebugInfo("IDENTIFIER");
+        .setDebugInfosTypeId("IDENTIFIER");
 
         return(result);
 
     }    
     
-    protected getBlockStart(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+    protected getBlockStart(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
             this.getBlockStartToken(),
             this.getSpacingToken(true)
             
@@ -170,8 +177,8 @@ export abstract class ALanguagePatternsFactory {
 
     }
     
-    protected getBlockEnd(): IChildablePattern {
-        const result: IChildablePattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+    protected getBlockEnd(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
             this.getBlockEndToken(),
             this.getSpacingToken(true)
             

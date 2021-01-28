@@ -1,43 +1,21 @@
 import { GenericList } from "@ric-ng/ts-general";
 
 import { IStringToParseMatchingsListOrNull } from './../types';
-import { IChildablePattern, IPatternsList, IStringToParseMatchingsList, IStringToParse } from "./../interfaces";
+import { IPattern, IPatternsList, IStringToParseMatchingsList, IStringToParse } from "./../interfaces";
 
-import { AChildablePattern } from "./AChildablePattern";
+import { APattern } from "./APattern";
 
 
 
-export abstract class APatternsList extends AChildablePattern implements IPatternsList {
+export abstract class APatternsList extends APattern implements IPatternsList {
 
-    protected list: GenericList<IChildablePattern>;
+    protected list: GenericList<IPattern>;
 
     protected stringToParseNextMatchingsListOrNull: IStringToParseMatchingsListOrNull;
 
+ 
 
-public debugString(indent: number = 0): string {
-    let index: number = 0;
-    let indentString: string;
-    indentString=" ".repeat(indent);
-
-    const infos: Array<string> = [];
-    infos.push(`${super.debugString()} ; elems: [ (${this.list.getElementsNumber()}) \n`);
-    for(const element of this.list.getElements()) {
-        infos.push( `    ${indentString}[${index++}]=> ${element.debugString(indent+4)}`  );
-    }
-    infos.push(`${indentString}]\n\n`);
-
-    return( infos.join("\n") );
-
-}
-protected debug(): void {
-    super.debug();
-    // console.log(this.list.getElements());
-    console.log(`\n`);
-}     
-
-    
-
-    constructor(patterns: Array<IChildablePattern> = []) {
+    constructor(patterns: Array<IPattern> = []) {
         super();
 
         this.createList();
@@ -45,12 +23,12 @@ protected debug(): void {
     }
     
     private createList(): void {
-        this.list = new GenericList<IChildablePattern>();
+        this.list = new GenericList<IPattern>();
         this.list.setAllowNullElement(false);
         
     }
     
-    definePatterns(patterns: Array<IChildablePattern>): IPatternsList {
+    definePatterns(patterns: Array<IPattern>): IPatternsList {
         if (patterns !== null) {
             this.list.clear();
             this.addPatterns(patterns);
@@ -58,39 +36,34 @@ protected debug(): void {
         return(this);
     }
 
-    definePattern(pattern: IChildablePattern): IPatternsList {
+    definePattern(pattern: IPattern): IPatternsList {
         if (pattern !== null) {
             this.definePatterns(Array(pattern));
         }
         return(this);         
     }
 
-    addPatterns(patterns: Array<IChildablePattern>): IPatternsList {
+    addPatterns(patterns: Array<IPattern>): IPatternsList {
         if (patterns !== null) {
+            let index: number = this.list.getElementsNumber();
+            for(const pattern of patterns) {
+                pattern.getDebugInfos().indice = index++;
+            }
             this.list.addElements(patterns);
-            this.setParentPatternTo(patterns);
         }
         return(this);        
     }
 
-    addPattern(pattern: IChildablePattern): IPatternsList {
+    addPattern(pattern: IPattern): IPatternsList {
         if (pattern !== null) {
-            this.list.addElement(pattern);
-            this.setParentPatternTo(Array(pattern));
+            this.addPatterns(Array(pattern));
         }
         return(this); 
     }
 
-    setParentPatternTo(patterns: Array<IChildablePattern>): IPatternsList {
-        for(const pattern of patterns) {
-            pattern.setParentPattern(this);
-        }
-        return(this);
-    }
-
-
 
     protected onPatternElementMatchingSuccess(
+        patternElement: IPattern,
         stringToParseMatchingsList: IStringToParseMatchingsList,
         stringToParse: IStringToParse
     ): void {
@@ -110,15 +83,18 @@ protected debug(): void {
     } 
     
     
-    private addStringToParseMatchingsList(stringToParseMatchingsList: IStringToParseMatchingsList): void {
+    private addStringToParseMatchingsList(
+        stringToParseMatchingsList: IStringToParseMatchingsList
+    ): void {
         this.defineStringToParseNextMatchingsListIfNotDefined();
+        console.log(`addStringToParseMatching de`, stringToParseMatchingsList, 'à', this.stringToParseNextMatchingsListOrNull);        
         this.stringToParseNextMatchingsListOrNull.addStringToParseMatching( stringToParseMatchingsList );      
 
     }
 
     private defineStringToParseNextMatchingsListIfNotDefined(): void {
         if (this.stringToParseNextMatchingsListOrNull === null) {
-            this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList();
+            this.stringToParseNextMatchingsListOrNull = this.createStringToParseMatchingsList(this);
         }
 
     }     

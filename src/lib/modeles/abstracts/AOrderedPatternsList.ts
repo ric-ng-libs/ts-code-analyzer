@@ -1,5 +1,5 @@
 import { IStringToParseMatchingOrNull, IStringToParseMatchingsListOrNull } from "./../types";
-import { IChildablePattern, IStringToParse } from "./../interfaces";
+import { IPattern, IStringToParse } from "./../interfaces";
 import { APatternsList } from "./APatternsList";
 
 
@@ -20,29 +20,29 @@ AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900
 
         this.list.each<IStringToParseMatchingsListOrNull>(
             
-            (patternElement: IChildablePattern, index: number): IStringToParseMatchingsListOrNull => {
-console.log(`\n----- Sur List ${this.constructor.name}): Treating this ElementPattern[${index}] ;`
-            +` (Element constructor name: ${patternElement.constructor.name})`);
-console.log(patternElement);
+            (patternElement: IPattern, index: number): IStringToParseMatchingsListOrNull => {
 
-                const stringToParseMatchingsListOrNull: IStringToParseMatchingsListOrNull = 
+                const stringToParseNextMatchingsListOrNull: IStringToParseMatchingsListOrNull = 
                     patternElement.listStringToParseNextConsecutiveMatchings(stringToParse);
 
-                if (stringToParseMatchingsListOrNull !== null) {
-                    this.onPatternElementMatchingSuccess(stringToParseMatchingsListOrNull, stringToParse);
+                if (stringToParseNextMatchingsListOrNull !== null) {
+                    this.onPatternElementMatchingSuccess(
+                        patternElement,
+                        stringToParseNextMatchingsListOrNull, 
+                        stringToParse
+                    );
 
                 } else {
                     this.onPatternElementMatchingFail();
+
                 }
 
-                return(stringToParseMatchingsListOrNull);
+                return(stringToParseNextMatchingsListOrNull);
             },
 
-            (stringToParseMatchingsListOrNull: IStringToParseMatchingsListOrNull): boolean => {
+            (stringToParseNextMatchingsListOrNull: IStringToParseMatchingsListOrNull): boolean => {
                 let breakLoop: boolean;
-                breakLoop = this.mustStopSearchingMatching(stringToParseMatchingsListOrNull);
-console.log(`breakLoop: ${breakLoop}  (List constructor name: ${this.constructor.name})`);
-console.log(`\n\n`);
+                breakLoop = this.mustStopSearchingMatching(stringToParseNextMatchingsListOrNull);
                 return(breakLoop);
             }
         );
