@@ -131,7 +131,7 @@ export abstract class ALanguagePatternsFactory {
     protected getExport(): IPattern {
         const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
             this.getExportToken(),
-            // this.getSpacingToken(false)
+            this.getSpacingToken(false)
             
         ], 0, 1)
         .setDebugInfosTypeId("EXPORT");

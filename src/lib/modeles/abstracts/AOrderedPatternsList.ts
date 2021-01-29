@@ -52,5 +52,4 @@ AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900
         return(this.stringToParseNextMatchingsListOrNull);
     }
 
-
 }

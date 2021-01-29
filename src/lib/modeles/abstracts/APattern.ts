@@ -55,7 +55,6 @@ export abstract class APattern implements IPattern {
     //                                           - null if fails, id est : if the consecutive matchings number is out of range ([min, max]).
     //                                           - an empty list, if there was no matching BUT the minimal number of macthings is also 0.
     listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): IStringToParseMatchingsListOrNull {
-        const pattern: IPattern = this;
         let stringToParseNextMatchingOrNull: IStringToParseMatchingOrNull;
         
         let nextConsecutiveMatchingsNumber: number = 0;
