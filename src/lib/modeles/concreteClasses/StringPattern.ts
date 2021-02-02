@@ -30,8 +30,24 @@ export class StringPattern extends ASimplePattern implements IStringPattern {
                                .testEquality(string, stringToCompare);
 
         result = (match)? stringToCompare : null;
-console.log( `          StringPattern match: ${match}; result=${result}` );
 
+        let loggerString: string = string;
+        const stringsConversionMap: Map<string, string > = new Map<string, string>([
+            ["\n", "\\CR"],
+            ["\r", "\\LF"],
+            ["\r\n", "\\CR\\LF"],
+            ["\n\r", "\\LF\\CR"]
+        ]);
+        const stringConversion: string = stringsConversionMap.get(loggerString);
+        if ( stringConversion !== undefined) loggerString = stringConversion;
+        this.logger.addLineToLog([
+            `  matching : ${match}; `,
+            `StringPattern : '${loggerString}' (${string.length});`,
+            `stringToCompare : '${stringToCompare}' (${stringToCompare.length});`,
+            `=> compare result : '${result}';`,
+            `caseSensitive: ${this.isCaseSensitivity()}`
+        ]);
+        
         return(result);
     }    
 

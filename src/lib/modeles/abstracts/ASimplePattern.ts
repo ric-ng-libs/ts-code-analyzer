@@ -22,10 +22,13 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
     }
 
     getDebugInfos(): IPatternDebugInfos {
-        const result: IPatternDebugInfos = super.getDebugInfos();
-        Object.assign(result, {
-            'string pattern': `'${this.getString()}' (Length:${this.getString().length})`
-        });
+        const oParentDebugInfos: IPatternDebugInfos = super.getDebugInfos();
+        const result: IPatternDebugInfos = Object.assign({
+            'str pattern': `'${this.getString()}'(${this.getString().length})`,
+            id: oParentDebugInfos.id,
+            constructorName: oParentDebugInfos.constructorName
+        }, oParentDebugInfos);
+        
         return(result);
     }    
     

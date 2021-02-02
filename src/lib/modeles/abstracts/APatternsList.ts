@@ -53,7 +53,7 @@ export abstract class APatternsList extends APattern implements IPatternsList {
         if (patterns !== null) {
             let index: number = this.list.getElementsNumber();
             for(const pattern of patterns) {
-                pattern.getDebugInfos().indice = index++;
+                pattern.getDebugInfos().index = index++;
             }
             this.list.addElements(patterns);
         }

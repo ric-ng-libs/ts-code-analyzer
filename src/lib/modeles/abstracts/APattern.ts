@@ -26,7 +26,7 @@ export abstract class APattern implements IPattern {
     protected debugInfos: IPatternDebugInfos = {
         id:  0,
         typeId: null,
-        indice: null,
+        index: null,
         constructorName: ""
     };
     protected logger: IStringablesLogger = null;
@@ -59,10 +59,9 @@ export abstract class APattern implements IPattern {
         return(this);
     }
     getDebugInfos(): IPatternDebugInfos {
-        const result: IPatternDebugInfos = Object.assign({}, this.debugInfos);
-        Object.assign(result, {
-            consecutiveMatchingsLimits: `[${this.consecutiveMatchingsMinNumber}, ${this.consecutiveMatchingsMaxNumber}]`
-        });
+        const result: IPatternDebugInfos = Object.assign({
+            MatchingBounds:`[${this.consecutiveMatchingsMinNumber}, ${this.consecutiveMatchingsMaxNumber}]`
+        }, this.debugInfos);
         return(result);
     }
     
@@ -72,12 +71,9 @@ export abstract class APattern implements IPattern {
     //                                           - an empty list, if there was no matching BUT the minimal number of macthings is also 0.
     listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): IStringToParseMatchingsListOrNull {
         this.logger.startBlock();
-        this.logger.addLineToLog("listStringToParseNextConsecutiveMatchings():");
-        this.logger.addLineToLog([
-            `stringToParse at pos. ${stringToParse.getPointerPosition()} / ${stringToParse.getMaxPointerPosition()}' : '`,
-            stringToParse.getStringFromPointerPosition(70), "...'"
-        ]);
+        this.logger.addLineToLog("DEBUT - listStringToParseNextConsecutiveMatchings():");
         this.logger.addLineToLog(['debugInfos:', this.getDebugInfos()]);
+
         let stringToParseNextMatchingOrNull: IStringToParseMatchingOrNull;
         
         let nextConsecutiveMatchingsNumber: number = 0;
@@ -91,6 +87,10 @@ export abstract class APattern implements IPattern {
 
         this.defineResultAsNull();
         while( !mustStopSearchingMatching && !stringToParse.isPointerAtTheEnd() ) {
+            this.logger.addLineSeparatorToLog().addLineToLog([
+                `stringToParse at pos. ${stringToParse.getPointerPosition()} / ${stringToParse.getMaxPointerPosition()} : `,
+                `'${stringToParse.getStringFromPointerPosition(70)}'...`
+            ]);            
             stringToParseNextMatchingOrNull = this.getStringToParseNextMatching(stringToParse);
             isLastMatchingTestOk = ( stringToParseNextMatchingOrNull !== null );
 
@@ -124,10 +124,19 @@ export abstract class APattern implements IPattern {
             this.defineResultAsNull();
         }
         
-        stringToParse.restoreLastSavedPointerPosition();
+        
+        this.logger.addLineToLog(['FIN - listStringToParseNextConsecutiveMatchings - RESULT:', this.getResult()]);
+        this.logger.addLineToLog(['debugInfos:', this.getDebugInfos()]);
+        this.logger.addLineToLog([
+            `consecutiveMatchingsNumber: ${nextConsecutiveMatchingsNumber} (`+
+            ((isInvalidConsecutiveMatchingsNumber)? "INVALID!" : "VALID!")+");",
+            `pointer at the end: ${stringToParse.isPointerAtTheEnd()} `+
+            `(${stringToParse.getPointerPosition()} / ${stringToParse.getMaxPointerPosition()});`,
+            `lastMatchingLength: ${lastMatchingLength}`
+        ]);
+        this.logger.endBlock(true).addLineSeparatorToLog(2);
 
-        this.logger.addLineToLog(['listStringToParseNextConsecutiveMatchings - RESULT:', this.getResult()]);
-        this.logger.endBlock(true);
+        stringToParse.restoreLastSavedPointerPosition();
         return(this.getResult());
     }
 

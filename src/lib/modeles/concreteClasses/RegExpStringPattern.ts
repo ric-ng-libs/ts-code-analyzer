@@ -20,11 +20,19 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
         let result: StringOrNull;
         
         const regExp: RegExp = this.getRegExp();
-console.log("           RegExp: ", regExp);
         const matchResult: Array<string> = stringToCompare.match(regExp);
-console.log("           RegExpPattern matchResult: ", matchResult);
 
-        result = ( (matchResult !== null) /*&& (match[0].length>0)*/ )? matchResult[0] : null;
+        const match: boolean = (matchResult !== null) /*&& (match[0].length>0)*/;
+        result = (match)? matchResult[0] : null;
+
+        this.logger.addLineToLog([
+            `  matching : ${match};`,
+            `RegExpStringPattern : '${regExp}';`,
+            `stringToCompare : '${stringToCompare.substr(0,35)}'... (${stringToCompare.length});`,
+            `matchResult : `+((match)? `['${matchResult.join("',")}'];` : `null`)+';',
+            `=> compare result : '${result}';`,
+            `caseSensitive: ${this.isCaseSensitivity()}`
+        ]);        
 
         return(result);
     }
