@@ -31,20 +31,12 @@ export class StringPattern extends ASimplePattern implements IStringPattern {
 
         result = (match)? stringToCompare : null;
 
-        let loggerString: string = string;
-        const stringsConversionMap: Map<string, string > = new Map<string, string>([
-            ["\n", "\\CR"],
-            ["\r", "\\LF"],
-            ["\r\n", "\\CR\\LF"],
-            ["\n\r", "\\LF\\CR"]
-        ]);
-        const stringConversion: string = stringsConversionMap.get(loggerString);
-        if ( stringConversion !== undefined) loggerString = stringConversion;
+        const loggerString: string = string.replaceCRLFBy();
         this.logger.addLineToLog([
             `  matching : ${match}; `,
             `StringPattern : '${loggerString}' (${string.length});`,
-            `stringToCompare : '${stringToCompare}' (${stringToCompare.length});`,
-            `=> compare result : '${result}';`,
+            `stringToCompare : '${stringToCompare.replaceCRLFBy()}' (${stringToCompare.length});`,
+            `=> compare result : '${(result!==null)? "'"+result.replaceCRLFBy()+"'" : null};`,
             `caseSensitive: ${this.isCaseSensitivity()}`
         ]);
         

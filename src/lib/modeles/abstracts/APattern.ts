@@ -71,7 +71,7 @@ export abstract class APattern implements IPattern {
     //                                           - an empty list, if there was no matching BUT the minimal number of macthings is also 0.
     listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): IStringToParseMatchingsListOrNull {
         this.logger.startBlock();
-        this.logger.addLineToLog("DEBUT - listStringToParseNextConsecutiveMatchings():");
+        this.logger.addLineToLog("*DEBUT - listStringToParseNextConsecutiveMatchings():");
         this.logger.addLineToLog(['debugInfos:', this.getDebugInfos()]);
 
         let stringToParseNextMatchingOrNull: IStringToParseMatchingOrNull;
@@ -89,7 +89,7 @@ export abstract class APattern implements IPattern {
         while( !mustStopSearchingMatching && !stringToParse.isPointerAtTheEnd() ) {
             this.logger.addLineSeparatorToLog().addLineToLog([
                 `stringToParse at pos. ${stringToParse.getPointerPosition()} / ${stringToParse.getMaxPointerPosition()} : `,
-                `'${stringToParse.getStringFromPointerPosition(70)}'...`
+                `'${stringToParse.getStringFromPointerPosition(70).replaceCRLFBy()}'...`
             ]);            
             stringToParseNextMatchingOrNull = this.getStringToParseNextMatching(stringToParse);
             isLastMatchingTestOk = ( stringToParseNextMatchingOrNull !== null );
@@ -125,7 +125,7 @@ export abstract class APattern implements IPattern {
         }
         
         
-        this.logger.addLineToLog(['FIN - listStringToParseNextConsecutiveMatchings - RESULT:', this.getResult()]);
+        this.logger.addLineToLog(['*FIN - listStringToParseNextConsecutiveMatchings - RESULT:', this.getResult()]);
         this.logger.addLineToLog(['debugInfos:', this.getDebugInfos()]);
         this.logger.addLineToLog([
             `consecutiveMatchingsNumber: ${nextConsecutiveMatchingsNumber} (`+

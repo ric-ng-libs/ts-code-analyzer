@@ -24,7 +24,7 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
     getDebugInfos(): IPatternDebugInfos {
         const oParentDebugInfos: IPatternDebugInfos = super.getDebugInfos();
         const result: IPatternDebugInfos = Object.assign({
-            'str pattern': `'${this.getString()}'(${this.getString().length})`,
+            'str pattern': `'${this.getString().replaceCRLFBy()}'(${this.getString().length})`,
             id: oParentDebugInfos.id,
             constructorName: oParentDebugInfos.constructorName
         }, oParentDebugInfos);
