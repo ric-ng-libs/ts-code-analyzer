@@ -1,7 +1,7 @@
 import { GenericList } from "@ric-ng/ts-general";
 
 import { IStringToParseMatchingsListOrNull } from './../types';
-import { IPattern, IPatternsList, IStringToParseMatchingsList, IStringToParse } from "./../interfaces";
+import { IPattern, IPatternsList, IStringToParseMatchingsList, IStringToParse, IPatternDebugInfos } from "./../interfaces";
 
 import { APattern } from "./APattern";
 
@@ -13,7 +13,13 @@ export abstract class APatternsList extends APattern implements IPatternsList {
 
     protected stringToParseNextMatchingsListOrNull: IStringToParseMatchingsListOrNull;
 
- 
+    getDebugInfos(): IPatternDebugInfos {
+        const result: IPatternDebugInfos = super.getDebugInfos();
+        Object.assign(result, {
+            'patterns List': `'${this.list.getElements()}' (Length:${this.list.getElementsNumber()})`
+        });
+        return(result);
+    } 
 
     constructor(patterns: Array<IPattern> = []) {
         super();

@@ -1,7 +1,7 @@
 import { StringOrNull, TypesTester } from '@ric-ng/ts-general';
 
 import { IStringToParseSimpleMatchingOrNull, IStringToParseMatchingOrNull } from "./../types";
-import { ISimplePattern, IStringToParse, IStringToParseSimpleMatching } from "./../interfaces";
+import { ISimplePattern, IStringToParse, IStringToParseSimpleMatching, IPatternDebugInfos } from "./../interfaces";
 
 import { APattern } from "./APattern";
 
@@ -17,10 +17,18 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
 
     private stringToParseNextSimpleMatchingOrNull: IStringToParseSimpleMatchingOrNull;
 
-    
     static setDefaultCaseSensitivity(caseSensitivity: boolean): void {
         this.defaultCaseSensitivity = caseSensitivity;
     }
+
+    getDebugInfos(): IPatternDebugInfos {
+        const result: IPatternDebugInfos = super.getDebugInfos();
+        Object.assign(result, {
+            'string pattern': `'${this.getString()}' (Length:${this.getString().length})`
+        });
+        return(result);
+    }    
+    
 
     protected abstract getStringToParseMinimalLength(): number;
 

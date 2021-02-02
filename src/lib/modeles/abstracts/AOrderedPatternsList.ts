@@ -23,7 +23,7 @@ AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900
             (patternElement: IPattern, index: number): IStringToParseMatchingsListOrNull => {
 
                 const stringToParseNextMatchingsListOrNull: IStringToParseMatchingsListOrNull = 
-                    patternElement.listStringToParseNextConsecutiveMatchings(stringToParse);
+                    patternElement.setStringablesLogger(this.logger).listStringToParseNextConsecutiveMatchings(stringToParse);
 
                 if (stringToParseNextMatchingsListOrNull !== null) {
                     this.onPatternElementMatchingSuccess(

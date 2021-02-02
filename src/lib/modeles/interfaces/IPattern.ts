@@ -1,3 +1,4 @@
+import { IStringablesLogger } from '@ric-ng/ts-general';
 import { IStringToParseMatchingsListOrNull } from "./../types";
 import { IStringToParse } from "./IStringToParse";
 import { ILanguageStringToParseMatchingInterpreter } from './ILanguageStringToParseMatchingInterpreter';
@@ -8,6 +9,7 @@ export interface IPattern {
 
     setDebugInfosTypeId(debugInfosTypeId: string): IPattern;
     getDebugInfos(): IPatternDebugInfos;
+    setStringablesLogger(stringablesLogger: IStringablesLogger): IPattern;
 
 
     //@return {IStringToParseMatchingsListOrNull}:

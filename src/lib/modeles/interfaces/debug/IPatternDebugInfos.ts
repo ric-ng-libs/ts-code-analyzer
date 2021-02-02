@@ -4,4 +4,5 @@ export interface IPatternDebugInfos {
     id:  number;
     typeId: StringOrNull;
     indice: NumberOrNull;
+    constructorName: string;
 }

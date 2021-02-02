@@ -1,4 +1,6 @@
+import { IStringablesLogger } from '@ric-ng/ts-general';
 import { IStringToParseMatchingsListOrNull, IStringToParseMatchingOrNull } from "./../types";
+
 import { 
     IPatternDebugInfos,
     IPattern, 
@@ -11,6 +13,7 @@ import {
 import { StringToParseMatchingsList } from '../concreteClasses/StringToParseMatchingsList';
 
 
+
 export abstract class APattern implements IPattern {
     
     private static staticDebugInfos: { [key: string]: any } = {
@@ -20,11 +23,13 @@ export abstract class APattern implements IPattern {
     private static readonly PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER_UNDEFINED_VALUE: number = null;
     private static readonly PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER: number = 50;
 
-    private debugInfos: IPatternDebugInfos = {
+    protected debugInfos: IPatternDebugInfos = {
         id:  0,
         typeId: null,
-        indice: null
+        indice: null,
+        constructorName: ""
     };
+    protected logger: IStringablesLogger = null;
     
     
     private languageStringToParseMatchingInterpreter: ILanguageStringToParseMatchingInterpreter = null;
@@ -40,6 +45,13 @@ export abstract class APattern implements IPattern {
     
     constructor() {
         this.debugInfos.id = APattern.staticDebugInfos.lastInstanceId++;
+        this.debugInfos.constructorName = this.constructor.name;
+        
+    }
+
+    setStringablesLogger(stringablesLogger: IStringablesLogger): IPattern {
+        this.logger = stringablesLogger;
+        return(this);
     }
 
     setDebugInfosTypeId(debugInfosTypeId: string): IPattern {
@@ -47,14 +59,25 @@ export abstract class APattern implements IPattern {
         return(this);
     }
     getDebugInfos(): IPatternDebugInfos {
-        return(this.debugInfos);
-    }      
+        const result: IPatternDebugInfos = Object.assign({}, this.debugInfos);
+        Object.assign(result, {
+            consecutiveMatchingsLimits: `[${this.consecutiveMatchingsMinNumber}, ${this.consecutiveMatchingsMaxNumber}]`
+        });
+        return(result);
+    }
     
 
     //@return {IStringToParseMatchingsListOrNull}:
     //                                           - null if fails, id est : if the consecutive matchings number is out of range ([min, max]).
     //                                           - an empty list, if there was no matching BUT the minimal number of macthings is also 0.
     listStringToParseNextConsecutiveMatchings(stringToParse: IStringToParse): IStringToParseMatchingsListOrNull {
+        this.logger.startBlock();
+        this.logger.addLineToLog("listStringToParseNextConsecutiveMatchings():");
+        this.logger.addLineToLog([
+            `stringToParse at pos. ${stringToParse.getPointerPosition()} / ${stringToParse.getMaxPointerPosition()}' : '`,
+            stringToParse.getStringFromPointerPosition(70), "...'"
+        ]);
+        this.logger.addLineToLog(['debugInfos:', this.getDebugInfos()]);
         let stringToParseNextMatchingOrNull: IStringToParseMatchingOrNull;
         
         let nextConsecutiveMatchingsNumber: number = 0;
@@ -103,6 +126,8 @@ export abstract class APattern implements IPattern {
         
         stringToParse.restoreLastSavedPointerPosition();
 
+        this.logger.addLineToLog(['listStringToParseNextConsecutiveMatchings - RESULT:', this.getResult()]);
+        this.logger.endBlock(true);
         return(this.getResult());
     }
 
