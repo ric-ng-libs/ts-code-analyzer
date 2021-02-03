@@ -3,7 +3,9 @@ import { StringOrNull, NumberOrNull } from '@ric-ng/ts-general';
 import { 
     IPattern, 
     IStringToParseMatching,
-    ILanguageStringToParseMatchingInterpreter
+    ILanguageStringToParseMatchingInterpreter,
+
+    IStringToParseMatchingDebugInfos
 } from './../interfaces';
 
 
@@ -14,10 +16,29 @@ private static lastId: number = 0;
 public _id: number = null;
  
     protected asString: StringOrNull = null;
+    private patternConsecutiveMatchingsNumber: number = null;
 
     abstract getAsString(useCache?: boolean): StringOrNull;
     abstract getPointerPosition(): NumberOrNull;
 
+
+    getDebugInfos(): IStringToParseMatchingDebugInfos {
+        let asString: StringOrNull = this.getAsString();
+        if (asString !== null) {
+            asString = asString.replaceCRLFBy();
+        }
+        const result: IStringToParseMatchingDebugInfos = {
+            patternConsecutiveMatchingsNumber: this.patternConsecutiveMatchingsNumber,
+            matchingString: asString,
+            matchingPattern: this.getPattern().getDebugInfos(),
+            matchingAtPosition: this.getPointerPosition(),
+            matchingTotalLength: this.getTotalLength(), 
+            subMatchings: null, 
+            constructorName: this.constructor.name,     
+            _id: this._id
+        };
+        return(result);
+    }
 
     constructor(
         private pattern: IPattern, 
@@ -27,6 +48,11 @@ public _id: number = null;
 
     getPattern(): IPattern {
         return(this.pattern);
+    }
+
+    setPatternConsecutiveMatchingsNumber(patternConsecutiveMatchingsNumber: number): IStringToParseMatching {
+        this.patternConsecutiveMatchingsNumber = patternConsecutiveMatchingsNumber;
+        return(this);
     }
 
     getTotalLength(useCache: boolean = true): NumberOrNull {

@@ -1,6 +1,12 @@
-import { IGenericList, GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
+import { GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
 
-import { IStringToParseMatching, IStringToParseMatchingsList, IPattern } from './../interfaces';
+import { 
+    IStringToParseMatching, 
+    IStringToParseMatchingsList, 
+    IPattern, 
+
+    IStringToParseMatchingDebugInfos 
+} from './../interfaces';
 
 import { AStringToParseMatching } from './../abstracts/AStringToParseMatching';
 
@@ -10,6 +16,31 @@ export class StringToParseMatchingsList
     implements IStringToParseMatchingsList {
 
     private list: GenericList<IStringToParseMatching>;
+
+
+    getDebugInfos(): IStringToParseMatchingDebugInfos {
+        const result: IStringToParseMatchingDebugInfos = 
+            Object.assign(
+                super.getDebugInfos(),
+                {
+                    subMatchings: this.getChildrenDebugInfos()
+                }
+            );
+        return(result);
+    }
+    
+    private getChildrenDebugInfos(): Array<IStringToParseMatchingDebugInfos> {
+        const result: Array<IStringToParseMatchingDebugInfos> = [];
+        this.list.each<void>(
+
+            (stringToParseMatching: IStringToParseMatching): void => {
+                result.push( stringToParseMatching.getDebugInfos() );
+            }
+
+        );
+        return(result);
+    }
+    
 
     constructor(
         pattern: IPattern, 

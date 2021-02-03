@@ -16,10 +16,23 @@ export abstract class APatternsList extends APattern implements IPatternsList {
     getDebugInfos(): IPatternDebugInfos {
         const result: IPatternDebugInfos = super.getDebugInfos();
         Object.assign(result, {
-            'patterns List': this.list.getElements()
+            'patterns List': this.getElementsDebugInfos()
         });
         return(result);
-    } 
+    }
+
+    private getElementsDebugInfos(): Array<IPatternDebugInfos> {
+        const result: Array<IPatternDebugInfos> = [];
+        this.list.each<void>(
+
+            (patternElement: IPattern): void => {
+                result.push( patternElement.getDebugInfos() );
+            }
+
+        );
+        return(result);
+    }
+
 
     constructor(patterns: Array<IPattern> = []) {
         super();

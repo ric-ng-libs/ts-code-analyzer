@@ -140,10 +140,15 @@ export abstract class APattern implements IPattern {
 
         if (isInvalidConsecutiveMatchingsNumber) {
             this.defineResultAsNull();
+            this.logger.addLineToLog(['RESULT:', null]);
+
+        } else {
+            this.getResult().setPatternConsecutiveMatchingsNumber(nextConsecutiveMatchingsNumber);
+            this.logger.addLineToLog(['RESULT:', this.getResult().getDebugInfos()]);
         }
         
         
-        this.logger.addLineToLog(['*END - listStringToParseNextConsecutiveMatchings - RESULT:', this.getResult()]);
+        this.logger.addLineToLog('*END - listStringToParseNextConsecutiveMatchings');
         this.logger.addLineToLog([
             `consecutiveMatchingsNumber: ${nextConsecutiveMatchingsNumber} (`+
             ((isInvalidConsecutiveMatchingsNumber)? "INVALID!" : "VALID!")+");",
@@ -157,6 +162,7 @@ export abstract class APattern implements IPattern {
         this.logger.addLineToLog(`pointer position after restore: ${stringToParse.getPointerPosition()}`);
 
         this.logger.endBlock(true).addLineSeparatorToLog(2);
+        
         return(this.getResult());
     }
 

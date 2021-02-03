@@ -50,7 +50,7 @@ AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900
             (stringToParseNextMatchingsListOrNull: IStringToParseMatchingsListOrNull): boolean => {
                 let breakLoop: boolean;
                 breakLoop = this.mustStopSearchingMatching(stringToParseNextMatchingsListOrNull);
-                this.logger.addLineToLog(`break each Loop: ${breakLoop}`);
+                this.logger.addLineToLog(`break eachLoop: ${breakLoop}`);
                 return(breakLoop);
             }
         );
