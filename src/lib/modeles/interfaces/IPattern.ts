@@ -8,6 +8,8 @@ import { IPatternDebugInfos } from './debug';
 export interface IPattern {
 
     setDebugInfosTypeId(debugInfosTypeId: string): IPattern;
+    setDebugInfosIndex(debugInfosIndex: string): IPattern;
+    setDebugInfosParentId(debugInfosParentId: number): IPattern;
     getDebugInfos(): IPatternDebugInfos;
     setStringablesLogger(stringablesLogger: IStringablesLogger): IPattern;
 

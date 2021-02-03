@@ -23,6 +23,11 @@ export class OrderedFullMatchPatternsList extends AOrderedPatternsList {
             stringToParse
         );
         stringToParse.incrementPointerPosition(stringToParseMatchingsList.getTotalLength());
+        this.logger.addLineToLog([`onPatternElementFullMatchingSuccess - `+
+                                  `INCREM. pointer position de +${stringToParseMatchingsList.getTotalLength()}`
+                                 +` => ${stringToParse.getPointerPosition()};`,
+                                 'debugInfos:', this.getDebugInfos()
+                                ]);
     }
 
     protected onPatternElementMatchingFail(): void {

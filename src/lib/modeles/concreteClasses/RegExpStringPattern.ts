@@ -30,7 +30,7 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
             `RegExpStringPattern : '${regExp}';`,
             `stringToCompare : '${stringToCompare.substr(0,35).replaceCRLFBy()}'... (${stringToCompare.length});`,
             `matchResult : `+((match)? `['${matchResult.join("',")}'];` : `null`)+';',
-            `=> compare result : '${(result!==null)? "'"+result.replaceCRLFBy()+"'" : null};`,            
+            `=> compare result : ${(result!==null)? "'"+result.replaceCRLFBy()+"'" : null};`,            
             `caseSensitive: ${this.isCaseSensitivity()}`
         ]);        
 

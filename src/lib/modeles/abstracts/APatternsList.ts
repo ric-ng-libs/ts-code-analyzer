@@ -16,7 +16,7 @@ export abstract class APatternsList extends APattern implements IPatternsList {
     getDebugInfos(): IPatternDebugInfos {
         const result: IPatternDebugInfos = super.getDebugInfos();
         Object.assign(result, {
-            'patterns List': `'${this.list.getElements()}' (Length:${this.list.getElementsNumber()})`
+            'patterns List': this.list.getElements()
         });
         return(result);
     } 
@@ -52,9 +52,13 @@ export abstract class APatternsList extends APattern implements IPatternsList {
     addPatterns(patterns: Array<IPattern>): IPatternsList {
         if (patterns !== null) {
             let index: number = this.list.getElementsNumber();
+            const finalLength: number = index + patterns.length;
             for(const pattern of patterns) {
-                pattern.getDebugInfos().index = index++;
+                pattern.setDebugInfosIndex(`${index} among ${finalLength} elements.`);
+                pattern.setDebugInfosParentId(this.getDebugInfos().id);
+                index++;
             }
+
             this.list.addElements(patterns);
         }
         return(this);        

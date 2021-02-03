@@ -36,7 +36,7 @@ export class StringPattern extends ASimplePattern implements IStringPattern {
             `  matching : ${match}; `,
             `StringPattern : '${loggerString}' (${string.length});`,
             `stringToCompare : '${stringToCompare.replaceCRLFBy()}' (${stringToCompare.length});`,
-            `=> compare result : '${(result!==null)? "'"+result.replaceCRLFBy()+"'" : null};`,
+            `=> compare result : ${(result!==null)? "'"+result.replaceCRLFBy()+"'" : null};`,
             `caseSensitive: ${this.isCaseSensitivity()}`
         ]);
         
