@@ -112,6 +112,7 @@ export abstract class APattern implements IPattern {
                 isInvalidConsecutiveMatchingsNumber = this.isTooManyConsecutiveMatchings(nextConsecutiveMatchingsNumber);
                 mustStopSearchingMatching = isInvalidConsecutiveMatchingsNumber;
                 if (!mustStopSearchingMatching) {
+                    
                     this.addToResult(stringToParseNextMatchingOrNull);
 
                     lastMatchingLength = stringToParseNextMatchingOrNull.getTotalLength();
@@ -196,7 +197,6 @@ export abstract class APattern implements IPattern {
     }    
     private addToResult(stringToParseMatching: IStringToParseMatching): void {
         this.defineResultAsEmptyListIfNotDefined();
-        console.log(`\n\n\n* addStringToParseMatching de `, stringToParseMatching, 'à', this.stringToParseNextConsecutiveMatchingsOrNull);
         this.stringToParseNextConsecutiveMatchingsOrNull.addStringToParseMatching( stringToParseMatching );
 
     }

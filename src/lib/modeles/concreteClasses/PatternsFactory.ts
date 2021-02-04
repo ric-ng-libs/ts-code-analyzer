@@ -39,7 +39,7 @@ export class PatternsFactory implements IPatternsFactory {
     getRegExpStringPattern(
         regExpStringPatternAsString: string, 
         consecutiveMatchingsMinNumber: number = 1,
-        consecutiveMatchingsMaxNumber: number = 1,
+        consecutiveMatchingsMaxNumber: number = null,
         caseSensitivity: boolean = true
     ): IRegExpStringPattern {
         const result: RegExpStringPattern = this.createRegExpStringPattern(regExpStringPatternAsString, caseSensitivity);

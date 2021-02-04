@@ -110,7 +110,6 @@ export abstract class APatternsList extends APattern implements IPatternsList {
         stringToParseMatchingsList: IStringToParseMatchingsList
     ): void {
         this.defineStringToParseNextMatchingsListIfNotDefined();
-        console.log(`addStringToParseMatching de`, stringToParseMatchingsList, 'à', this.stringToParseNextMatchingsListOrNull);        
         this.stringToParseNextMatchingsListOrNull.addStringToParseMatching( stringToParseMatchingsList );      
 
     }

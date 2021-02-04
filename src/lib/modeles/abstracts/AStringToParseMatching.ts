@@ -12,8 +12,8 @@ import {
 
 export abstract class AStringToParseMatching implements IStringToParseMatching {
 
-private static lastId: number = 0;
-public _id: number = null;
+    private static lastId: number = 0;
+    public _id: number = null;
  
     protected asString: StringOrNull = null;
     private patternConsecutiveMatchingsNumber: number = null;

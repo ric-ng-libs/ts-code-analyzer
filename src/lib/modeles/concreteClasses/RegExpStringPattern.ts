@@ -27,9 +27,9 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
 
         this.logger.addLineToLog([
             `  matching : ${match};`,
-            `RegExpStringPattern : '${regExp}';`,
+            `RegExpStringPattern ('^${this.getString()}'/(${this.getRegExpOptions()})): '${regExp}';`,
             `stringToCompare : '${stringToCompare.substr(0,35).replaceCRLFBy()}'... (${stringToCompare.length});`,
-            `matchResult : `+((match)? `['${matchResult.join("',")}'];` : `null`)+';',
+            `matchResult : `+((match)? `['${matchResult.join("',")}']` : `null`)+';',
             `=> compare result : ${(result!==null)? "'"+result.replaceCRLFBy()+"'" : null};`,            
             `caseSensitive: ${this.isCaseSensitivity()}`
         ]);        
@@ -51,7 +51,6 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
     }
     private getRegExp(): RegExp {
         const regExpString: string = this.getString();
-console.log(`           regExpString: '${regExpString}'`);
         const regExpOptions: string = this.getRegExpOptions();
         const result: RegExp = new RegExp(`^${regExpString}`, regExpOptions);
         return (result);
