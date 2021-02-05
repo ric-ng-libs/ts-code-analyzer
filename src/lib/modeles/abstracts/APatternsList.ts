@@ -46,7 +46,7 @@ export abstract class APatternsList extends APattern implements IPatternsList {
         this.list.setAllowNullElement(false);
         
     }
-    
+
     definePatterns(patterns: Array<IPattern>): IPatternsList {
         if (patterns !== null) {
             this.list.clear();

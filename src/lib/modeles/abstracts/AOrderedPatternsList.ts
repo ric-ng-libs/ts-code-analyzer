@@ -1,3 +1,5 @@
+import { LoggerMessageType } from '@ric-ng/ts-general';
+
 import { IStringToParseMatchingOrNull, IStringToParseMatchingsListOrNull } from "./../types";
 import { IPattern, IStringToParse } from "./../interfaces";
 import { APatternsList } from "./APatternsList";
@@ -61,7 +63,40 @@ AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900
 
         this.onAfterSearchMatchings(stringToParse);
 
-        return(this.stringToParseNextMatchingsListOrNull);
+        return(this.getSimplifiedResult());
     }
+
+    private isMatching(): boolean {
+        const result: boolean = (this.stringToParseNextMatchingsListOrNull !== null);
+        return(result);
+    }
+
+    private getResultElementsNumber(): number {
+        const result: number = (this.isMatching()) ? this.stringToParseNextMatchingsListOrNull.getList().getElementsNumber() : 0;
+        return(result);
+
+    }
+
+    private getSimplifiedResult(): IStringToParseMatchingOrNull {
+        const resultElementsNumber: number = this.getResultElementsNumber();
+        const isMonoElementResult: boolean = (resultElementsNumber === 1);
+        const result: IStringToParseMatchingOrNull = 
+            (isMonoElementResult) ? 
+                this.stringToParseNextMatchingsListOrNull.getList().getElementByIndex(0)
+            : 
+                this.stringToParseNextMatchingsListOrNull
+            ;
+
+        if (isMonoElementResult)  {
+            this.logger.addLineToLog([
+                result,
+                "  instead of  ",
+                this.stringToParseNextMatchingsListOrNull,
+            ], LoggerMessageType.warning, false);
+        }          
+
+        return(result); 
+    }
+    
 
 }

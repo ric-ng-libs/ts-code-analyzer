@@ -1,4 +1,4 @@
-import { GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
+import { IGenericList, GenericList, NumberOrNull, StringOrNull } from '@ric-ng/ts-general';
 
 import { 
     IStringToParseMatching, 
@@ -57,6 +57,10 @@ export class StringToParseMatchingsList
             this.list.setAllowNullElement(false);
         }
     }
+
+    getList(): IGenericList<IStringToParseMatching> {
+        return(this.list);
+    }    
 
     getAsString(useCache: boolean = true): StringOrNull {
         if (this.asString === null || !useCache) {
