@@ -16,7 +16,6 @@ export abstract class AStringToParseMatching implements IStringToParseMatching {
     public _id: number = null;
  
     protected asString: StringOrNull = null;
-    private patternConsecutiveMatchingsNumber: number = null;
 
     abstract getAsString(useCache?: boolean): StringOrNull;
     abstract getPointerPosition(): NumberOrNull;
@@ -27,14 +26,15 @@ export abstract class AStringToParseMatching implements IStringToParseMatching {
         if (asString !== null) {
             asString = asString.replaceCRLFBy();
         }
+        const matchingPattern: IPattern = this.getPattern();
         const result: IStringToParseMatchingDebugInfos = {
-            patternConsecutiveMatchingsNumber: this.patternConsecutiveMatchingsNumber,
+            constructorName: this.constructor.name,     
+            matchingPatternType: matchingPattern.constructor.name,
             matchingString: asString,
-            matchingPattern: this.getPattern().getDebugInfos(),
+            matchingPattern: matchingPattern.getDebugInfos(),
+            subMatchings: null, 
             matchingAtPosition: this.getPointerPosition(),
             matchingTotalLength: this.getTotalLength(), 
-            subMatchings: null, 
-            constructorName: this.constructor.name,     
             _id: this._id
         };
         return(result);
@@ -48,11 +48,6 @@ export abstract class AStringToParseMatching implements IStringToParseMatching {
 
     getPattern(): IPattern {
         return(this.pattern);
-    }
-
-    setPatternConsecutiveMatchingsNumber(patternConsecutiveMatchingsNumber: number): IStringToParseMatching {
-        this.patternConsecutiveMatchingsNumber = patternConsecutiveMatchingsNumber;
-        return(this);
     }
 
     getTotalLength(useCache: boolean = true): NumberOrNull {

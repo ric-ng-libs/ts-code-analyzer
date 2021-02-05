@@ -10,7 +10,6 @@ export interface IStringToParseMatching {
     getDebugInfos(): IStringToParseMatchingDebugInfos;
     
     getPattern(): IPattern;
-    setPatternConsecutiveMatchingsNumber(patternConsecutiveMatchingsNumber: number): IStringToParseMatching;
     interpret(): IStringToParseMatching;
 
     getPointerPosition(): NumberOrNull;

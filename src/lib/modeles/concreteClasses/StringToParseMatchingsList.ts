@@ -19,13 +19,8 @@ export class StringToParseMatchingsList
 
 
     getDebugInfos(): IStringToParseMatchingDebugInfos {
-        const result: IStringToParseMatchingDebugInfos = 
-            Object.assign(
-                super.getDebugInfos(),
-                {
-                    subMatchings: this.getChildrenDebugInfos()
-                }
-            );
+        const result: IStringToParseMatchingDebugInfos = super.getDebugInfos();
+        result.subMatchings = this.getChildrenDebugInfos();
         return(result);
     }
     

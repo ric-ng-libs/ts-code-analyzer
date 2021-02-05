@@ -24,11 +24,11 @@ export abstract class APattern implements IPattern {
     private static readonly PATTERN_MAX_CONSECUTIVE_MATCHINGS_NUMBER: number = 50;
 
     protected debugInfos: IPatternDebugInfos = {
+        constructorName: "",
+        typeId: null,
         id:  0,
         parentId: null,
-        typeId: null,
-        index: null,
-        constructorName: ""
+        index: null
     };
     protected logger: IStringablesLogger = null;
     
@@ -69,8 +69,8 @@ export abstract class APattern implements IPattern {
     }
     getDebugInfos(): IPatternDebugInfos {
         const result: IPatternDebugInfos = Object.assign({
-            MatchingBounds:`[${this.consecutiveMatchingsMinNumber}, ${this.consecutiveMatchingsMaxNumber}]`,
-            constructorName: this.debugInfos.constructorName
+            constructorName: this.debugInfos.constructorName,
+            MatchingBounds:`[${this.consecutiveMatchingsMinNumber}, ${this.consecutiveMatchingsMaxNumber}]`
         }, this.debugInfos);
         return(result);
     }
@@ -144,7 +144,6 @@ export abstract class APattern implements IPattern {
             this.logger.addLineToLog(['RESULT:', null]);
 
         } else {
-            this.getResult().setPatternConsecutiveMatchingsNumber(nextConsecutiveMatchingsNumber);
             this.logger.addLineToLog(['RESULT:', this.getResult().getDebugInfos()]);
         }
         
