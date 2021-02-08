@@ -26,4 +26,12 @@ export interface ILanguageTokensProvider {
     
     getIdentifier(): string;
 
+
+
+
+
+
+    getXMLTagStartDelimiter(finalTag: boolean): string;
+    getXMLTagEndDelimiter(): string;    
+
 }

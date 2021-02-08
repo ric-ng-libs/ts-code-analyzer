@@ -52,4 +52,19 @@ export abstract class ALanguageTokensProvider {
         return (result);
     }
 
+
+
+
+    getXMLTagStartDelimiter(finalTag: boolean): string {
+        let result: string = "<";
+        if (finalTag) {
+            result += "/";
+        }
+        return (result);
+    }    
+    getXMLTagEndDelimiter(): string {
+        const result: string = ">";
+        return (result);
+    }        
+
 }

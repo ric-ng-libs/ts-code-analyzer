@@ -186,6 +186,69 @@ export abstract class ALanguagePatternsFactory {
 
         return(result);
 
+    }
+    
+    protected getClassBlockStart(): IPattern {
+        const result: IPattern = this.getBlockStart();
+        return(result);
+
+    }    
+    protected getClassBlockEnd(): IPattern {
+        const result: IPattern = this.getBlockEnd();
+        return(result);
+
+    }  
+
+
+
+    
+    protected getXMLTagStartToken(finalTag: boolean): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern(
+            this.languageTokensProvider.getXMLTagStartDelimiter(finalTag),
+            1, 1
+        );
+        return(result);
+    }
+    protected getXMLTagEndToken(): IPattern {
+        const result: IPattern = this.patternsFactory.getStringPattern(
+            this.languageTokensProvider.getXMLTagEndDelimiter(),
+            1, 1
+        );
+        return(result);
+    }    
+    
+    protected getXMLTag(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+            this.getXMLTagStartToken(false),
+            this.getIdentifierToken(),
+            this.getXMLTagEndToken()
+            
+        ], 1, 1)
+        .setDebugInfosTypeId("getXMLTag");
+        return(result);
+
+    }
+    protected getXMLFinalTag(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+            this.getXMLTagStartToken(true),
+            this.getIdentifierToken(),
+            this.getXMLTagEndToken()
+            
+        ], 1, 1)
+        .setDebugInfosTypeId("getXMLFinalTag");
+        return(result);
+
+    }    
+
+    getXMLTagsPair(): IPattern {
+        const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
+            this.getXMLTag(),
+            this.getXMLFinalTag()
+
+        ], 1, null)
+        .setDebugInfosTypeId("getXMLTagsPair");
+        
+        return(result);         
     }    
 
     

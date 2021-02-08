@@ -11,7 +11,6 @@ export class LanguageTypescriptPatternsFactory extends ALanguagePatternsFactory 
 
     
     getClass(): IPattern {
-
         const result: IPattern = this.patternsFactory.getOrderedFullMatchPatternsList([
             this.getSpacingToken(true),
             
@@ -24,13 +23,12 @@ export class LanguageTypescriptPatternsFactory extends ALanguagePatternsFactory 
 
             this.getIdentifier().setLanguageStringToParseMatchingInterpreter(this.languageStringToParseMatchingInterpreter),
 
-            this.getBlockStart(),
+            this.getClassBlockStart()
             
-            this.getBlockEnd()
 
-        ], 0, null)
+        ], 1, null)
         .setLanguageStringToParseMatchingInterpreter(this.languageStringToParseMatchingInterpreter)
-        .setDebugInfosTypeId("CLASS");
+        .setDebugInfosTypeId("CLASS - START");
         
         return(result);        
     }
