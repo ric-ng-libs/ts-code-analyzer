@@ -23,7 +23,9 @@ export class LanguageTypescriptPatternsFactory extends ALanguagePatternsFactory 
 
             this.getIdentifier().setLanguageStringToParseMatchingInterpreter(this.languageStringToParseMatchingInterpreter),
 
-            this.getClassBlockStart()
+            this.getClassBlockStart(),
+
+            this.getClassBlockEnd()
             
 
         ], 1, null)

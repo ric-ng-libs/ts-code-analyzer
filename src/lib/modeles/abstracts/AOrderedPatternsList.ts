@@ -16,7 +16,7 @@ export abstract class AOrderedPatternsList extends APatternsList {
     getStringToParseNextMatching(stringToParse: IStringToParse): IStringToParseMatchingOrNull {
         this.stringToParseNextMatchingsListOrNull = null;
 
-AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>900) throw new Error("OVER RECURSIONS !!!");
+AOrderedPatternsList.recursions++;       if (AOrderedPatternsList.recursions>9000) throw new Error("OVER RECURSIONS !!!");
 
         this.onBeforeSearchMatchings(stringToParse);
 
