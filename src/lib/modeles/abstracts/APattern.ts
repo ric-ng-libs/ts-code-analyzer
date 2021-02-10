@@ -196,6 +196,8 @@ export abstract class APattern implements IPattern {
     }    
     private addToResult(stringToParseMatching: IStringToParseMatching): void {
         this.defineResultAsEmptyListIfNotDefined();
+        stringToParseMatching.set
+        listStringToParseNextConsecutiveMatchings
         this.stringToParseNextConsecutiveMatchingsOrNull.addStringToParseMatching( stringToParseMatching );
 
     }

@@ -28,7 +28,8 @@ export abstract class AStringToParseMatching implements IStringToParseMatching {
         }
         const matchingPattern: IPattern = this.getPattern();
         const result: IStringToParseMatchingDebugInfos = {
-            constructorName: this.constructor.name,     
+            constructorName: this.constructor.name,    
+            addedFromFunc: "", 
             matchingPatternType: matchingPattern.constructor.name,
             matchingString: asString,
             matchingPattern: matchingPattern.getDebugInfos(),
