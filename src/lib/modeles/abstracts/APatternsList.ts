@@ -111,7 +111,7 @@ export abstract class APatternsList extends APattern implements IPatternsList {
     ): void {
         this.defineStringToParseNextMatchingsListIfNotDefined();
         this.stringToParseNextMatchingsListOrNull.addStringToParseMatching( stringToParseMatchingsList );      
-
+        this.stringToParseNextMatchingsListOrNull.setDebugInfosAddedFromFunc("onPatternElementMatchingSuccess");
     }
 
     private defineStringToParseNextMatchingsListIfNotDefined(): void {

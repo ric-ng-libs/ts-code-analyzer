@@ -188,6 +188,7 @@ export abstract class APattern implements IPattern {
     }
     private defineResultAsEmptyList(): void {
         this.stringToParseNextConsecutiveMatchingsOrNull = this.createStringToParseMatchingsList(this);        
+        this.stringToParseNextConsecutiveMatchingsOrNull.setDebugInfosAddedFromFunc("list...ConsecutiveMatchings");
     }
     private defineResultAsEmptyListIfNotDefined(): void {
         if (this.stringToParseNextConsecutiveMatchingsOrNull === null) {
@@ -196,8 +197,6 @@ export abstract class APattern implements IPattern {
     }    
     private addToResult(stringToParseMatching: IStringToParseMatching): void {
         this.defineResultAsEmptyListIfNotDefined();
-        stringToParseMatching.set
-        listStringToParseNextConsecutiveMatchings
         this.stringToParseNextConsecutiveMatchingsOrNull.addStringToParseMatching( stringToParseMatching );
 
     }

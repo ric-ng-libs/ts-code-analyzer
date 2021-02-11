@@ -100,7 +100,7 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
             stringToParseMatchingAsString,
             stringToParse.getPointerPosition()
         );
-
+        this.stringToParseNextSimpleMatchingOrNull.setDebugInfosAddedFromFunc("onMatchingSuccess");
     }
 
 
