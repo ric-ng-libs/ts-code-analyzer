@@ -25,9 +25,11 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
         const match: boolean = (matchResult !== null) /*&& (match[0].length>0)*/;
         result = (match)? matchResult[0] : null;
 
+        let regExpOptions: string = this.getRegExpOptions();
+        regExpOptions = (regExpOptions === "")? "" : `/(${regExpOptions})`;
         this.logger.addLineToLog([
             `  matching : ${match};`,
-            `RegExpStringPattern ('^${this.getString()}'/(${this.getRegExpOptions()})): '${regExp}';`,
+            `RegExpStringPattern ('^${this.getString()}${regExpOptions}'): '${regExp}';`,
             `stringToCompare : '${stringToCompare.substr(0,35).replaceCRLFBy()}'... (${stringToCompare.length});`,
             `matchResult : `+((match)? `['${matchResult.join("',")}']` : `null`)+';',
             `=> compare result : ${(result!==null)? "'"+result.replaceCRLFBy()+"'" : null};`,            
@@ -39,7 +41,7 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
     
 
     private getDefaultRegExpOptions(): string {
-        const result: string = ""; //"g";
+        const result: string = "";
         return(result);
     }
     private getRegExpOptions(): string {
