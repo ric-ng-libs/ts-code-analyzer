@@ -100,7 +100,6 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
             stringToParseMatchingAsString,
             stringToParse.getPointerPosition()
         );
-        this.stringToParseNextSimpleMatchingOrNull.setDebugInfosAddedFromFunc("onMatchingSuccess");
     }
 
 
@@ -114,7 +113,10 @@ export abstract class ASimplePattern extends APattern implements ISimplePattern 
         const result: IStringToParseSimpleMatching = new StringToParseSimpleMatching(
             this, 
             stringToParseMatchingAsString,
-            stringToParsePointerPosition
+            stringToParsePointerPosition,
+            {
+                createdFrom: "AsimplePattern.onMatchingSuccess"
+            }
         );
         return(result);
     }     

@@ -8,7 +8,6 @@ export interface IStringToParseMatching {
 
 
     getDebugInfos(): IStringToParseMatchingDebugInfos;
-    setDebugInfosAddedFromFunc(addedFromFunc: string): IStringToParseMatching;
     
     getPattern(): IPattern;
     interpret(): IStringToParseMatching;

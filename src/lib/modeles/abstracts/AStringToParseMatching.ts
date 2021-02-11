@@ -17,15 +17,11 @@ export abstract class AStringToParseMatching implements IStringToParseMatching {
  
     protected asString: StringOrNull = null;
 
-    private otherDebugInfosAddedFromFunc: string = null;
 
     abstract getAsString(useCache?: boolean): StringOrNull;
     abstract getPointerPosition(): NumberOrNull;
 
-    setDebugInfosAddedFromFunc(addedFromFunc: string): IStringToParseMatching {
-        this.otherDebugInfosAddedFromFunc = addedFromFunc;
-        return(this);
-    }
+    
     getDebugInfos(): IStringToParseMatchingDebugInfos {
         let asString: StringOrNull = this.getAsString();
         if (asString !== null) {
@@ -33,8 +29,8 @@ export abstract class AStringToParseMatching implements IStringToParseMatching {
         }
         const matchingPattern: IPattern = this.getPattern();
         const result: IStringToParseMatchingDebugInfos = {
-            constructorName: this.constructor.name,    
-            addedFromFunc: this.otherDebugInfosAddedFromFunc, 
+            constructorName: this.constructor.name,
+            ...this.otherDebugInfos,   
             matchingPatternType: matchingPattern.constructor.name,
             matchingString: asString,
             matchingPattern: matchingPattern.getDebugInfos(),
@@ -49,9 +45,12 @@ export abstract class AStringToParseMatching implements IStringToParseMatching {
 
     constructor(
         private pattern: IPattern, 
+        protected otherDebugInfos: object = null
     ) {
         this._id = AStringToParseMatching.lastId++;
+        this.otherDebugInfos = otherDebugInfos || {};
     }
+
 
     getPattern(): IPattern {
         return(this.pattern);

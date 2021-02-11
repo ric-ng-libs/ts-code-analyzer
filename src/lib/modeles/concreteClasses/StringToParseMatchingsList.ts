@@ -39,9 +39,10 @@ export class StringToParseMatchingsList
 
     constructor(
         pattern: IPattern, 
-        stringToParseMatchings: Array<IStringToParseMatching> = []
+        stringToParseMatchings: Array<IStringToParseMatching> = [],
+        otherDebugInfos: object = null
     ) {
-        super(pattern);
+        super(pattern, otherDebugInfos);
 
         this.createList(stringToParseMatchings);
     }        

@@ -18,9 +18,10 @@ export class StringToParseSimpleMatching
     constructor(
         pattern: IPattern, 
         stringToParseMatching: string,
-        pointerPosition: number
+        pointerPosition: number,
+        otherDebugInfos: object = null
     ) {
-        super(pattern);
+        super(pattern, otherDebugInfos);
 
         this.setAsString(stringToParseMatching);
         this.setPointerPosition(pointerPosition);
