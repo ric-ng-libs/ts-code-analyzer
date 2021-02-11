@@ -39,7 +39,7 @@ export class RegExpStringPattern extends ASimplePattern implements IRegExpString
     
 
     private getDefaultRegExpOptions(): string {
-        const result: string = "g";
+        const result: string = ""; //"g";
         return(result);
     }
     private getRegExpOptions(): string {
