@@ -1,13 +1,15 @@
 {
   "name": "@ric-ng/ts-parser",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Parser. (mais Librairie créée au format: Angular Package)",
   "peerDependencies": {
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14"
+    "@angular/common": "^12.1.0",
+    "@angular/core": "^12.1.0"
   },
   "dependencies": {
-    "@ric-ng/ts-general": "0.0.6"
+    "tslib": "^2.2.0",
+
+    "@ric-ng/ts-general": "0.0.8"
   },
   "repository" : {
     "type": "git",

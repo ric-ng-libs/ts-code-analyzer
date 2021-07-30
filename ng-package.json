@@ -7,8 +7,8 @@
       "@ric-ng/ts-general": "@ric-ng/ts-general"
     }
   },
-
-  "whitelistedNonPeerDependencies": [
+  
+  "allowedNonPeerDependencies": [
     "@ric-ng/ts-general"
   ]
 }
